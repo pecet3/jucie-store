@@ -1,0 +1,62 @@
+package components
+
+templ AddProductForm() {
+	<div class="flex flex-col justify-center items-center m-auto gap-4">
+		<form
+			id="imageUploadForm"
+			enctype="multipart/form-data"
+			class="flex flex-col justify-center items-center gap-2 rounded-md border border-black"
+		>
+			<label for="image">Image:</label>
+			<input type="file" id="image" name="image" accept="image/*" required/>
+			<button type="submit" class="bg-gray-300">Upload Image</button>
+		</form>
+		<form
+			id="productForm"
+			action="/products"
+			method="POST"
+			class="flex flex-col justify-center items-center gap-2 rounded-md border border-black"
+		>
+			<label for="name">Name:</label>
+			<input type="text" id="name" name="name" required/>
+			<label for="description">Description:</label>
+			<textarea id="description" name="description" rows="4" cols="50" required></textarea>
+			<label for="quantity">Quantity:</label>
+			<input type="number" id="quantity" name="quantity" required/>
+			<label for="price">Price:</label>
+			<input type="number" id="price" name="price" step="0.01" required/>
+			<label for="category">Category:</label>
+			<input type="text" id="category" name="category" required/>
+			<input type="hidden" id="image_url" name="image_url"/>
+			<input type="submit" value="Submit Product" class="bg-gray-300"/>
+		</form>
+	</div>
+	<script type="text/javascript">
+        document.getElementById('imageUploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            var formData = new FormData(this);
+            
+            fetch('/upload-image', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('image_url').value = data.url;
+                alert('Image uploaded successfully');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error uploading image');
+            });
+        });
+
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            if (!document.getElementById('image_url').value) {
+                e.preventDefault();
+                alert('Please upload an image first');
+            }
+        });
+    </script>
+}

@@ -14,7 +14,7 @@ import (
 	"github.com/google/uuid"
 )
 
-const MAX_SIZE = 1024 * 1024 * 2 // 2mb
+const MAX_SIZE = 1024 * 1024 * 10 // 2mb
 
 type StorageServices interface {
 	AddImage(file multipart.File, header *multipart.FileHeader, subpath string) (string, error)
@@ -78,7 +78,7 @@ func (m Services) AddImage(file multipart.File, header *multipart.FileHeader, su
 
 	switch ext {
 	case ".jpg", ".jpeg":
-		options := &jpeg.Options{Quality: 50}
+		options := &jpeg.Options{Quality: 100}
 		err = jpeg.Encode(out, img, options)
 	case ".png":
 		err = png.Encode(out, img)

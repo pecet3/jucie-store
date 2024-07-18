@@ -16,6 +16,7 @@ type App struct {
 	sessions  *auth.SessionStore
 	validator *validator.Validate
 	data      data.Data
+	storage   storage.StorageServices
 }
 
 func main() {
@@ -28,12 +29,13 @@ func main() {
 		sessions:  auth.NewSessionStore(data),
 		validator: validator.New(),
 		data:      data,
+		storage:   storage.Services{},
 	}
 
 	auth.Run(mux, app.sessions, app.data, app.validator)
 	storage.Run(mux, app.data.Db, app.sessions)
 
-	controllers.Run(mux)
+	controllers.Run(mux, app.data, app.storage)
 
 	address := "127.0.0.1:8090"
 	server := &http.Server{
