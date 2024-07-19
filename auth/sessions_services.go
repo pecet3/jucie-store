@@ -136,7 +136,6 @@ func (as *SessionStore) Authorize(next http.HandlerFunc) http.Handler {
 			return
 		}
 		sessionToken := cookie.Value
-		log.Println(sessionToken)
 		var s *Session
 		s, exists := as.GetAuthSession(sessionToken)
 		log.Println(s)
@@ -156,7 +155,7 @@ func (as *SessionStore) Authorize(next http.HandlerFunc) http.Handler {
 
 		if s.Expiry.Before(time.Now()) {
 			delete(as.AuthSessions, sessionToken)
-			http.Redirect(w, r, "/auth/refresh-token", http.StatusPermanentRedirect)
+			http.Redirect(w, r, "/auth/refresh-token", http.StatusSeeOther)
 			return
 		}
 		log.Printf("Authorized user with Id: %v session_token:%s, path:%s", userId, sessionToken, r.URL.Path)

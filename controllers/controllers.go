@@ -28,14 +28,15 @@ func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices, ss *auth.Se
 		sessionStore: ss,
 	}
 	mux.Handle("/panel", ss.Authorize(c.panelController))
-	mux.HandleFunc("/products", c.productsController)
+	mux.HandleFunc("GET /products", c.productsController)
+	mux.Handle("POST /products", ss.Authorize(c.productsController))
+
 	mux.HandleFunc("/login", c.loginController)
 }
 
 func (c controllers) panelController(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		views.PanelPage().Render(r.Context(), w)
-		return
 	}
 
 }
@@ -61,7 +62,7 @@ func (c controllers) loginController(w http.ResponseWriter, r *http.Request) {
 				Value:   token,
 				Expires: us.Expiry,
 			})
-			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+			http.Redirect(w, r, "/panel", http.StatusSeeOther)
 			return
 		}
 		http.Error(w, "wrong credentials", http.StatusUnauthorized)

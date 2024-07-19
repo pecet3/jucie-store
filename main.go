@@ -31,7 +31,6 @@ func main() {
 		storage:   storage.Services{},
 	}
 
-	auth.Run(mux, app.sessions, app.data, app.validator)
 	storage.Run(mux, app.data.Db, app.sessions)
 
 	controllers.Run(mux, app.data, app.storage, app.sessions)
