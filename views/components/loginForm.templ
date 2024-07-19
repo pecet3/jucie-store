@@ -1,49 +1,21 @@
 package components
 
 templ LoginForm() {
-	<!DOCTYPE html>
-	<html lang="en">
-		<head>
-			<meta charset="UTF-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<title>Login</title>
-			<script>
-        async function loginUser(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            const response = await fetch('/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, password })
-            });
-
-            if (response.ok) {
-                alert('Login successful');
-            } else {
-                alert('Login failed');
-            }
-        }
-    </script>
-		</head>
-		<body>
-			<h2>Login</h2>
-			<form onsubmit="loginUser(event)">
-				<label for="email">Email:</label>
-				<br/>
-				<input type="email" id="email" name="email" required/>
-				<br/>
-				<br/>
-				<label for="password">Password:</label>
-				<br/>
-				<input type="password" id="password" name="password" required minlength="6"/>
-				<br/>
-				<br/>
-				<input type="submit" value="Login"/>
-			</form>
-		</body>
-	</html>
+	<form action="/login" method="POST">
+		<div class="mb-4">
+			<label for="username" class="block mb-2 text-sm font-bold text-gray-700">Username</label>
+			<input type="text" id="username" name="username" class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" required/>
+		</div>
+		<div class="mb-6">
+			<label for="password" class="block mb-2 text-sm font-bold text-gray-700">Password</label>
+			<input type="password" id="password" name="password" class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" required/>
+		</div>
+		<div class="flex items-center justify-between">
+			<input
+				value="Login"
+				type="submit"
+				class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+			/>
+		</div>
+	</form>
 }

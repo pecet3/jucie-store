@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
+	"github.com/pecet3/my-api/auth"
 	"github.com/pecet3/my-api/data"
 	"github.com/pecet3/my-api/storage"
 	"github.com/pecet3/my-api/views"
@@ -14,43 +16,60 @@ import (
 )
 
 type controllers struct {
-	data    data.Data
-	storage storage.StorageServices
+	data         data.Data
+	storage      storage.StorageServices
+	sessionStore *auth.SessionStore
 }
 
-func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices) {
+func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices, ss *auth.SessionStore) {
 	c := controllers{
-		data:    d,
-		storage: s,
+		data:         d,
+		storage:      s,
+		sessionStore: ss,
 	}
-	mux.HandleFunc("/panel", c.panelController)
+	mux.Handle("/panel", ss.Authorize(c.panelController))
 	mux.HandleFunc("/products", c.productsController)
 	mux.HandleFunc("/login", c.loginController)
-	mux.HandleFunc("/register", c.registerController)
-
 }
 
 func (c controllers) panelController(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		views.PanelPage().Render(r.Context(), w)
-
+		return
 	}
 
 }
 func (c controllers) loginController(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		views.LoginPage().Render(r.Context(), w)
+		return
+	}
+	if r.Method == "POST" {
+		name := os.Getenv("USER_NAME")
+		password := os.Getenv("USER_PASSWORD")
 
+		formUser := r.FormValue("username")
+		formPassword := r.FormValue("password")
+
+		log.Println(formUser, formPassword)
+
+		if name == formUser && password == formPassword {
+			us, token := c.sessionStore.NewAuthSession(r, 123)
+			c.sessionStore.AddAuthSession(token, us)
+			http.SetCookie(w, &http.Cookie{
+				Name:    "session_token",
+				Value:   token,
+				Expires: us.Expiry,
+			})
+			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+			return
+		}
+		http.Error(w, "wrong credentials", http.StatusUnauthorized)
+		return
 	}
 
 }
-func (c controllers) registerController(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		views.PanelPage().Render(r.Context(), w)
 
-	}
-
-}
 func (c controllers) productsController(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		products, err := c.data.Product.GetAll(c.data.Db)

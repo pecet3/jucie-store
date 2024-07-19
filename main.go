@@ -22,7 +22,6 @@ type App struct {
 func main() {
 	log.Println("Running the server...")
 	loadEnv()
-
 	mux := http.NewServeMux()
 	data := data.New()
 	app := App{
@@ -35,7 +34,7 @@ func main() {
 	auth.Run(mux, app.sessions, app.data, app.validator)
 	storage.Run(mux, app.data.Db, app.sessions)
 
-	controllers.Run(mux, app.data, app.storage)
+	controllers.Run(mux, app.data, app.storage, app.sessions)
 
 	address := "127.0.0.1:8090"
 	server := &http.Server{

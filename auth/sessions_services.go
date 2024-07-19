@@ -49,7 +49,7 @@ const (
 
 func (as *SessionStore) NewAuthSession(r *http.Request, uId int) (*Session, string) {
 	newToken := uuid.NewString()
-	expiresAt := time.Now().Add(600 * time.Second)
+	expiresAt := time.Now().Add(12 * time.Hour)
 
 	us := &Session{
 		UserId: uId,
@@ -129,7 +129,7 @@ func (as *SessionStore) Authorize(next http.HandlerFunc) http.Handler {
 		cookie, err := r.Cookie("session_token")
 		if err != nil {
 			if err == http.ErrNoCookie {
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 				return
 			}
 			http.Error(w, "Bad request", http.StatusBadRequest)
@@ -141,7 +141,7 @@ func (as *SessionStore) Authorize(next http.HandlerFunc) http.Handler {
 		s, exists := as.GetAuthSession(sessionToken)
 		log.Println(s)
 		if !exists {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 			return
 		}
 		userIp := utils.GetIP(r)
@@ -149,7 +149,8 @@ func (as *SessionStore) Authorize(next http.HandlerFunc) http.Handler {
 
 		if s.UserIp != userIp {
 			log.Printf("[!!!] Unauthorized ip: %s wanted to authorize as userID: %v ", userIp, userId)
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+
 			return
 		}
 
