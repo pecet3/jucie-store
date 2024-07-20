@@ -14,7 +14,7 @@ import (
 	"github.com/google/uuid"
 )
 
-const MAX_SIZE = 1024 * 1024 * 10 // 2mb
+const MAX_SIZE = 1024 * 1024 * 10 // 10mb
 
 type StorageServices interface {
 	AddImage(file multipart.File, header *multipart.FileHeader, subpath string) (string, error)
@@ -68,7 +68,7 @@ func (m Services) AddImage(file multipart.File, header *multipart.FileHeader, su
 		return "", nil
 	}
 
-	fileName := "pecet.it." + uuid.NewString() + "_" + header.Filename
+	fileName := "juice_" + uuid.NewString()
 
 	out, err := os.Create("./uploads/images/" + subpath + fileName)
 	if err != nil {
