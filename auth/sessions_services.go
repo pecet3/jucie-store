@@ -124,7 +124,7 @@ func (as *SessionStore) RemoveEmailSession(token string) {
 	delete(as.EmailSessions, token)
 }
 
-func (as *SessionStore) Authorize(next http.HandlerFunc) http.Handler {
+func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("session_token")
 		if err != nil {

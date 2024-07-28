@@ -20,7 +20,7 @@ func Run(srv *http.ServeMux, db *sql.DB, as *auth.SessionStore) {
 		db:      db,
 		methods: &Services{},
 	}
-	srv.Handle("POST /upload-image", as.Authorize(s.handleUpload))
+	srv.Handle("POST /upload-image", as.AuthorizeAdmin(s.handleUpload))
 	srv.HandleFunc("/images/", s.serveFileHandler)
 }
 
