@@ -8,7 +8,7 @@ package views_page
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func MainPage() templ.Component {
+func HowPage() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -38,7 +38,7 @@ func MainPage() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"mt-48 max-w-xl\"><h1 class=\"text-6xl font-semibold mb-4 leading-normal text-white\">PROJEKT JUICE<br><span class=\"font-light text-purple-950\">Level Up Your Vaping</span></h1><p class=\"text-lg text-white\">At Projekt Juice, we specialize in crafting premium vape oils using top-quality flavors from the most renowned brands.</p><div class=\"mt-10 text-white\"><a href=\"#\" class=\"bg-purple-950 rounded-3xl py-3 px-8 font-medium inline-block mr-4 hover:bg-transparent hover:border-purple-950 hover:text-white duration-300 hover:border border border-transparent\">Order Now</a></div><div class=\"mt-10\"><img src=\"images/grocery-image.png\" class=\"w-1/2 mx-auto xl:w-1/3 xl:absolute bottom-0 right-60\"></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex-grow flex items-center justify-center py-16\"><div class=\"w-full max-w-screen-lg px-4\"><div class=\"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12\"><!-- Step 1 --><div class=\"border-4 border-white rounded-lg flex flex-col items-center justify-center gap-6 shadow-lg w-full max-w-xs p-6\"><img src=\"images/vape.png\" class=\"w-24 h-24 object-contain\" alt=\"Step 1\"><div class=\"text-center\"><h4 class=\"font-semibold capitalize text-3xl step-title text-white\">STEP 1</h4><p class=\"text-white text-lg mt-4\">WYBIERZ PRODUKT ODPOWIEDNI SMAK MOC ORAZ POJEMNOŚĆ NASTEPNIE DODAJ DO KOSZYKA</p></div></div><!-- Step 2 --><div class=\"border-4 border-white rounded-lg flex flex-col items-center justify-center gap-6 shadow-lg w-full max-w-xs p-6\"><img src=\"images/basket.png\" class=\"w-24 h-24 object-contain\" alt=\"Step 2\"><div class=\"text-center\"><h4 class=\"font-semibold capitalize text-3xl step-title text-white \">STEP 2</h4><p class=\"text-white text-lg mt-4\">PRZEJDŹ DO KOSZYKA. SFINALIZUJ ZAMÓWIENIE PODAJĄC ADRES PACZKOMATU ORAZ NICK Z APLIKACJI SIGNAL</p></div></div><!-- Step 3 --><div class=\"border-4 border-white rounded-lg flex flex-col items-center justify-center gap-6 shadow-lg w-full max-w-xs p-6\"><img src=\"images/chat.png\" class=\"w-24 h-24 object-contain\" alt=\"Step 3\"><div class=\"text-center\"><h4 class=\"font-semibold capitalize text-3xl step-title text-white\">STEP 3</h4><p class=\"text-white text-lg mt-4\">OCZEKUJ NA ULTRASZYBKĄ ODPOWIEDŹ NA APLIKACJI SIGNAL W CELU SFINALIZOWANIA ZAMÓWIENIA</p></div></div></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -44,7 +44,6 @@ func (s storage) handleUpload(w http.ResponseWriter, r *http.Request) {
 
 func (s storage) serveFileHandler(w http.ResponseWriter, r *http.Request) {
 	filePath := r.URL.Path
-	log.Println("Accessing to resource:", filePath)
 	if _, err := os.Stat("./" + filePath); os.IsNotExist(err) {
 		http.Error(w, "File not found", http.StatusNotFound)
 		return

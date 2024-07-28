@@ -8,7 +8,7 @@ package views_page
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func Views_page() templ.Component {
+func Layout() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -26,7 +26,7 @@ func Views_page() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>PROJEKT JUICE</title><link rel=\"stylesheet\" href=\"style.css\"><script src=\"https://cdn.tailwindcss.com\"></script></head><body class=\"w-full h-full bg-[url(&#39;images/image.png&#39;)] bg-center bg-cover\"><div class=\"min-h-screen w-full h-full px-28 py-5 relative\"><nav class=\"flex justify-between items-center p-4\"><img src=\"images/pjlogo.png\" class=\"w-40 cursor-pointer\"><ul class=\"flex-1 text-center\"><li class=\"list-none inline-block px-5\"><a href=\"#\" class=\"no-underline text-white px-2 font-semibold\">HOW ?</a></li><li class=\"list-none inline-block px-5\"><a href=\"#\" class=\"no-underline text-white px-2 font-semibold\">JUICES</a></li><li class=\"list-none inline-block px-5\"><a href=\"#\" class=\"no-underline text-white px-2 font-semibold\">CONTACT</a></li></ul><img src=\"images/cart.png\" class=\"w-8 cursor-pointer\"></nav>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>PROJEKT JUICE</title><link rel=\"stylesheet\" href=\"style.css\"><script src=\"https://cdn.tailwindcss.com\"></script></head><body class=\"w-full h-full bg-[url(&#39;images/image.png&#39;)] bg-center bg-cover\"><div class=\"min-h-screen w-full h-full px-28 py-5 relative\"><nav class=\"flex justify-between items-center p-4\"><a href=\"/\"><img src=\"images/pjlogo.png\" class=\"w-40 cursor-pointer\"></a><ul class=\"flex-1 text-center\"><li class=\"list-none inline-block px-5\"><a href=\"/how\" class=\"no-underline text-white px-2 font-semibold\">HOW ?</a></li><li class=\"list-none inline-block px-5\"><a href=\"/juices\" class=\"no-underline text-white px-2 font-semibold\">JUICES</a></li><li class=\"list-none inline-block px-5\"><a href=\"/contact\" class=\"no-underline text-white px-2 font-semibold\">CONTACT</a></li></ul><img src=\"images/cart.png\" class=\"w-8 cursor-pointer\"></nav>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
