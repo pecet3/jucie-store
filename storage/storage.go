@@ -45,7 +45,7 @@ func (s storage) handleUpload(w http.ResponseWriter, r *http.Request) {
 func (s storage) serveFileHandler(w http.ResponseWriter, r *http.Request) {
 	filePath := r.URL.Path
 	log.Println("Accessing to resource:", filePath)
-	if _, err := os.Stat("./uploads/" + filePath); os.IsNotExist(err) {
+	if _, err := os.Stat("./" + filePath); os.IsNotExist(err) {
 		http.Error(w, "File not found", http.StatusNotFound)
 		return
 	}
@@ -53,6 +53,7 @@ func (s storage) serveFileHandler(w http.ResponseWriter, r *http.Request) {
 	mimeTypes := map[string]string{
 		".jpg":  "image/jpeg",
 		".jpeg": "image/jpeg",
+		".png":  "image/png",
 	}
 
 	mime, exists := mimeTypes[ext]
@@ -62,5 +63,5 @@ func (s storage) serveFileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", mime)
-	http.ServeFile(w, r, "./uploads/"+filePath)
+	http.ServeFile(w, r, "./"+filePath)
 }

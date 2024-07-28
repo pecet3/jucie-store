@@ -13,6 +13,7 @@ import (
 	"github.com/pecet3/my-api/storage"
 	"github.com/pecet3/my-api/views"
 	"github.com/pecet3/my-api/views/components"
+	"github.com/pecet3/my-api/views_page"
 )
 
 type controllers struct {
@@ -27,11 +28,19 @@ func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices, ss *auth.Se
 		storage:      s,
 		sessionStore: ss,
 	}
+	mux.HandleFunc("/", c.mainPageController)
+
 	mux.Handle("/panel", ss.Authorize(c.panelController))
 	mux.HandleFunc("GET /products", c.productsController)
 	mux.Handle("POST /products", ss.Authorize(c.productsController))
 
 	mux.HandleFunc("/login", c.loginController)
+}
+
+func (c controllers) mainPageController(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		views_page.Views_page().Render(r.Context(), w)
+	}
 }
 
 func (c controllers) panelController(w http.ResponseWriter, r *http.Request) {

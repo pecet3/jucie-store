@@ -1,0 +1,28 @@
+package views_page
+
+templ Views_page() {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>PROJEKT JUICE</title>
+			<link rel="stylesheet" href="style.css"/>
+			<script src="https://cdn.tailwindcss.com"></script>
+		</head>
+		<body class="w-full h-full bg-[url('images/image.png')] bg-center bg-cover">
+			<div class="min-h-screen w-full h-full px-28 py-5 relative">
+				<nav class="flex justify-between items-center p-4">
+					<img src="images/pjlogo.png" class="w-40 cursor-pointer"/>
+					<ul class="flex-1 text-center">
+						<li class="list-none inline-block px-5"><a href="#" class="no-underline text-white px-2 font-semibold">HOW ?</a></li>
+						<li class="list-none inline-block px-5"><a href="#" class="no-underline text-white px-2 font-semibold">JUICES</a></li>
+						<li class="list-none inline-block px-5"><a href="#" class="no-underline text-white px-2 font-semibold">CONTACT</a></li>
+					</ul>
+					<img src="images/cart.png" class="w-8 cursor-pointer"/>
+				</nav>
+				{ children... }
+			</div>
+		</body>
+	</html>
+}
