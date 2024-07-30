@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-	"time"
 
 	"github.com/pecet3/my-api/data"
 	"github.com/pecet3/my-api/views"
@@ -72,6 +71,7 @@ func (c controllers) productsController(w http.ResponseWriter, r *http.Request) 
 			http.Error(w, "Error Saving or compressing a file", http.StatusInternalServerError)
 			return
 		}
+		log.Println(path)
 		quantity, err := strconv.Atoi(r.FormValue("quantity"))
 		if err != nil {
 			http.Error(w, "Invalid quantity", http.StatusBadRequest)
@@ -87,11 +87,6 @@ func (c controllers) productsController(w http.ResponseWriter, r *http.Request) 
 			Name:        name,
 			Description: description,
 			ImageURL:    path,
-			Quantity:    quantity,
-			Price:       price,
-			Category:    category,
-			CreatedAt:   time.Now(),
-			UpdatedAt:   time.Now(),
 		}
 
 		_, err = product.Add(c.data.Db, name, description, path, quantity, price, category)

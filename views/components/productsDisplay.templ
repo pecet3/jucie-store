@@ -1,15 +1,11 @@
 package components
 
-import (
-	"github.com/pecet3/my-api/data"
-	"strconv"
-)
+import "github.com/pecet3/my-api/data"
 
 templ ProductsDisplay(products []data.Product) {
 	<div>
 		for _, p := range products {
 			<div>{ p.Name }</div>
-			<div>{ strconv.FormatFloat(p.Price, 'f', 2, 64) }</div>
 			<div>{ p.Description }</div>
 			<img src={ p.ImageURL } alt="photo artykulu"/>
 		}

@@ -24,6 +24,7 @@ type Services struct {
 }
 
 func (m Services) AddImage(file multipart.File, header *multipart.FileHeader, subpath string) (string, error) {
+	log.Println("Image start")
 
 	defer file.Close()
 
