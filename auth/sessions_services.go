@@ -149,7 +149,6 @@ func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 		if s.UserIp != userIp {
 			log.Printf("[!!!] Unauthorized ip: %s wanted to authorize as userID: %v ", userIp, userId)
 			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
-
 			return
 		}
 
@@ -158,7 +157,6 @@ func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 			http.Redirect(w, r, "/auth/refresh-token", http.StatusSeeOther)
 			return
 		}
-		log.Printf("Authorized user with Id: %v session_token:%s, path:%s", userId, sessionToken, r.URL.Path)
 		ctx := context.WithValue(r.Context(), &Session{}, s)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

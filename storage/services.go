@@ -70,7 +70,7 @@ func (m Services) AddImage(file multipart.File, header *multipart.FileHeader, su
 
 	fileName := "juice_" + uuid.NewString()
 
-	out, err := os.Create("./uploads/images/" + subpath + fileName)
+	out, err := os.Create("./static/products-images/" + subpath + fileName)
 	if err != nil {
 		return "", nil
 	}

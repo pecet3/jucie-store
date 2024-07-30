@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -57,10 +56,8 @@ func (c controllers) productsController(w http.ResponseWriter, r *http.Request) 
 			http.Error(w, "", http.StatusInternalServerError)
 		}
 		components.ProductsDisplay(products).Render(r.Context(), w)
-
 	}
 	if r.Method == "POST" {
-		// Parse form values
 		name := r.FormValue("name")
 		description := r.FormValue("description")
 		file, header, err := r.FormFile("image")
@@ -69,15 +66,12 @@ func (c controllers) productsController(w http.ResponseWriter, r *http.Request) 
 			http.Error(w, "Error retrieving file", http.StatusBadRequest)
 			return
 		}
-
 		path, err := c.storage.AddImage(file, header, "")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, "Error Saving or compressing a file", http.StatusInternalServerError)
 			return
 		}
-
-		fmt.Fprintf(w, "File uploaded successfully: %s", path)
 		quantity, err := strconv.Atoi(r.FormValue("quantity"))
 		if err != nil {
 			http.Error(w, "Invalid quantity", http.StatusBadRequest)
@@ -89,7 +83,6 @@ func (c controllers) productsController(w http.ResponseWriter, r *http.Request) 
 			return
 		}
 		category := r.FormValue("category")
-
 		product := data.Product{
 			Name:        name,
 			Description: description,
@@ -106,8 +99,7 @@ func (c controllers) productsController(w http.ResponseWriter, r *http.Request) 
 			http.Error(w, "Failed to add product", http.StatusInternalServerError)
 			return
 		}
-
-		// Redirect to the success page or product list
+		log.Println("Added a product")
 		http.Redirect(w, r, "/panel", http.StatusSeeOther)
 	}
 }
