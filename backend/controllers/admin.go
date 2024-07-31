@@ -71,7 +71,6 @@ func (c controllers) productsController(w http.ResponseWriter, r *http.Request) 
 			http.Error(w, "Error Saving or compressing a file", http.StatusInternalServerError)
 			return
 		}
-		log.Println(path)
 		quantity, err := strconv.Atoi(r.FormValue("quantity"))
 		if err != nil {
 			http.Error(w, "Invalid quantity", http.StatusBadRequest)
