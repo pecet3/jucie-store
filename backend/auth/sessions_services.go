@@ -137,7 +137,6 @@ func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 		sessionToken := cookie.Value
 		var s *Session
 		s, exists := as.GetAuthSession(sessionToken)
-		log.Println(s)
 		if !exists {
 			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 			return

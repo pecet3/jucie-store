@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/pecet3/my-api/data"
 	"github.com/pecet3/my-api/views"
@@ -41,7 +40,7 @@ func (c handlers) loginAdminHandler(w http.ResponseWriter, r *http.Request) {
 		formUser := r.FormValue("username")
 		formPassword := r.FormValue("password")
 
-		log.Println(formUser, formPassword)
+		log.Println("New panel login")
 
 		if name == formUser && password == formPassword {
 			us, token := c.sessionStore.NewAuthSession(r, 123)
@@ -83,24 +82,13 @@ func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Error Saving or compressing a file", http.StatusInternalServerError)
 			return
 		}
-		quantity, err := strconv.Atoi(r.FormValue("quantity"))
-		if err != nil {
-			http.Error(w, "Invalid quantity", http.StatusBadRequest)
-			return
-		}
-		price, err := strconv.ParseFloat(r.FormValue("price"), 64)
-		if err != nil {
-			http.Error(w, "Invalid price", http.StatusBadRequest)
-			return
-		}
-		category := r.FormValue("category")
 		product := data.Product{
 			Name:        name,
 			Description: description,
 			ImageURL:    path,
 		}
 
-		_, err = product.Add(c.data.Db, name, description, path, quantity, price, category)
+		_, err = product.Add(c.data.Db, name, description, path)
 		if err != nil {
 			http.Error(w, "Failed to add product", http.StatusInternalServerError)
 			return

@@ -54,21 +54,25 @@ func (p Product) GetAll(db *sql.DB) ([]Product, error) {
 
 	return products, nil
 }
+
 func (p Product) GetById(db *sql.DB, id int) (*Product, error) {
-	query := "select id, name, description, image_url, quantity, price, category, created_at, updated_at from products where id = ?"
+	query := "SELECT id, name, description, image_url FROM products WHERE id = ?"
 	row := db.QueryRow(query, id)
 	var product Product
 	err := row.Scan(&product.Id, &product.Name, &product.Description, &product.ImageURL)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("product with id %d not found", id)
+		}
 		log.Println(err)
 		return nil, err
 	}
 	return &product, nil
 }
 
-func (p Product) Add(db *sql.DB, name, description, imageURL string, quantity int, price float64, category string) (int, error) {
-	query := "insert into products (name, description, image_url, quantity, price, category) values (?, ?, ?, ?, ?, ?)"
-	result, err := db.Exec(query, name, description, imageURL, quantity, price, category)
+func (p Product) Add(db *sql.DB, name, description, imageURL string) (int, error) {
+	query := "INSERT INTO products (name, description, image_url) VALUES (?, ?, ?)"
+	result, err := db.Exec(query, name, description, imageURL)
 	if err != nil {
 		log.Println(err)
 		return -1, err
@@ -82,7 +86,7 @@ func (p Product) Add(db *sql.DB, name, description, imageURL string, quantity in
 }
 
 func (p Product) RemoveById(db *sql.DB, id int) error {
-	query := "delete from products where id = ?"
+	query := "DELETE FROM products WHERE id = ?"
 	_, err := db.Exec(query, id)
 	if err != nil {
 		log.Println(err)
@@ -91,9 +95,9 @@ func (p Product) RemoveById(db *sql.DB, id int) error {
 	return nil
 }
 
-func (p Product) Edit(db *sql.DB, id int, name, description, imageURL string, quantity int, price float64, category string) error {
-	query := "update products set name = ?, description = ?, image_url = ?, quantity = ?, price = ?, category = ?, updated_at = current_timestamp where id = ?"
-	_, err := db.Exec(query, name, description, imageURL, quantity, price, category, id)
+func (p Product) Edit(db *sql.DB, id int, name, description, imageURL string) error {
+	query := "UPDATE products SET name = ?, description = ?, image_url = ? WHERE id = ?"
+	_, err := db.Exec(query, name, description, imageURL, id)
 	if err != nil {
 		log.Println(err)
 		return err

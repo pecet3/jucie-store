@@ -88,7 +88,7 @@ func insertPrices(db *sql.DB) error {
     INSERT INTO prices (capacity, price) VALUES
     (30,  29.99),
     (60,  49.99),
-    (100, 69.99),
+    (100, 69.99)
     `
 
 	_, err := db.Exec(pricesSQL)
