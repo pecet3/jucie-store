@@ -1,4 +1,4 @@
-package controllers
+package handlers
 
 import (
 	"log"
@@ -11,13 +11,13 @@ import (
 	"github.com/pecet3/my-api/views/components"
 )
 
-func (c controllers) panelController(w http.ResponseWriter, r *http.Request) {
+func (c handlers) panelHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		views.PanelPage().Render(r.Context(), w)
 	}
 
 }
-func (c controllers) loginController(w http.ResponseWriter, r *http.Request) {
+func (c handlers) loginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		views.LoginPage().Render(r.Context(), w)
 		return
@@ -48,7 +48,7 @@ func (c controllers) loginController(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c controllers) productsController(w http.ResponseWriter, r *http.Request) {
+func (c handlers) productsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		products, err := c.data.Product.GetAll(c.data.Db)
 		if err != nil {

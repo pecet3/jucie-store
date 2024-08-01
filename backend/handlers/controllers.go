@@ -1,4 +1,4 @@
-package controllers
+package handlers
 
 import (
 	"net/http"
@@ -9,35 +9,35 @@ import (
 	"github.com/pecet3/my-api/views_page"
 )
 
-type controllers struct {
+type handlers struct {
 	data         data.Data
 	storage      storage.StorageServices
 	sessionStore *auth.SessionStore
 }
 
 func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices, ss *auth.SessionStore) {
-	c := controllers{
+	c := handlers{
 		data:         d,
 		storage:      s,
 		sessionStore: ss,
 	}
-	mux.HandleFunc("/", c.mainPageController)
-	mux.HandleFunc("/how", c.howPageController)
+	mux.HandleFunc("/", c.mainPageHandler)
+	mux.HandleFunc("/how", c.howPageHandler)
 
-	mux.Handle("/panel", ss.AuthorizeAdmin(c.panelController))
-	mux.HandleFunc("GET /products", c.productsController)
-	mux.Handle("POST /products", ss.AuthorizeAdmin(c.productsController))
+	mux.Handle("/panel", ss.AuthorizeAdmin(c.panelHandler))
+	mux.HandleFunc("GET /products", c.productsHandler)
+	mux.Handle("POST /products", ss.AuthorizeAdmin(c.productsHandler))
 
-	mux.HandleFunc("/login", c.loginController)
+	mux.HandleFunc("/login", c.loginHandler)
 }
 
-func (c controllers) mainPageController(w http.ResponseWriter, r *http.Request) {
+func (c handlers) mainPageHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		views_page.MainPage().Render(r.Context(), w)
 	}
 }
 
-func (c controllers) howPageController(w http.ResponseWriter, r *http.Request) {
+func (c handlers) howPageHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		views_page.HowPage().Render(r.Context(), w)
 	}

@@ -7,8 +7,8 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
 	"github.com/pecet3/my-api/auth"
-	"github.com/pecet3/my-api/controllers"
 	"github.com/pecet3/my-api/data"
+	"github.com/pecet3/my-api/handlers"
 	"github.com/pecet3/my-api/storage"
 )
 
@@ -33,7 +33,7 @@ func main() {
 
 	storage.Run(mux, app.data.Db, app.sessions)
 
-	controllers.Run(mux, app.data, app.storage, app.sessions)
+	handlers.Run(mux, app.data, app.storage, app.sessions)
 
 	address := "127.0.0.1:8090"
 	server := &http.Server{
