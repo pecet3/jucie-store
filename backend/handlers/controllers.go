@@ -28,7 +28,7 @@ func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices, ss *auth.Se
 	mux.HandleFunc("GET /products", c.productsHandler)
 	mux.Handle("POST /products", ss.AuthorizeAdmin(c.productsHandler))
 
-	mux.HandleFunc("/login", c.loginHandler)
+	mux.HandleFunc("/login", c.loginAdminHandler)
 }
 
 func (c handlers) mainPageHandler(w http.ResponseWriter, r *http.Request) {

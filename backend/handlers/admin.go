@@ -17,7 +17,7 @@ func (c handlers) panelHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
-func (c handlers) loginHandler(w http.ResponseWriter, r *http.Request) {
+func (c handlers) loginAdminHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		views.LoginPage().Render(r.Context(), w)
 		return
