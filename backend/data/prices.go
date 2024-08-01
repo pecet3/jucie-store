@@ -59,16 +59,28 @@ func (pr Price) UpdatePrice(db *sql.DB, p Price) error {
 	return nil
 }
 
-func (pr Price) GetPrice(db *sql.DB, id int) (Price, error) {
-	var p Price
-	err := db.QueryRow("SELECT id, capacity, price FROM prices WHERE id = ?", id).Scan(&p.Id, &p.Capacity, &p.Price)
+func (pr Price) GetAll(db *sql.DB) ([]Price, error) {
+	rows, err := db.Query("SELECT id, capacity, price FROM prices")
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return p, fmt.Errorf("price not found")
-		}
-		return p, err
+		return nil, fmt.Errorf("failed to query prices: %v", err)
 	}
-	return p, nil
+	defer rows.Close()
+
+	var prices []Price
+	for rows.Next() {
+		var p Price
+		err := rows.Scan(&p.Id, &p.Capacity, &p.Price)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan price row: %v", err)
+		}
+		prices = append(prices, p)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error during row iteration: %v", err)
+	}
+
+	return prices, nil
 }
 
 func insertPrices(db *sql.DB) error {

@@ -8,10 +8,10 @@ templ AddProductForm() {
 			action="/products"
 			method="POST"
 			enctype="multipart/form-data"
-			class="flex flex-col justify-center items-center gap-2 rounded-md border border-black"
+			class="flex flex-col justify-center items-center gap-2 border border-black"
 		>
 			<label for="name">Name:</label>
-			<input type="text" id="name" name="name" required/>
+			<input type="text" id="name" name="name" rows="2" required/>
 			<label for="description">Description:</label>
 			<textarea id="description" name="description" rows="4" cols="50" required></textarea>
 			<label for="image">Image:</label>

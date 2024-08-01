@@ -1,0 +1,25 @@
+package components
+
+import (
+	"github.com/pecet3/my-api/data"
+	"strconv"
+)
+
+templ PricesForm(p []data.Price) {
+	<div class="flex ">
+		for _, pr :=range p {
+			<form method="PUT" action="/prices" class="border border-black">
+				<label for="price">{ strconv.Itoa(pr.Capacity) }</label>
+				<input
+					type="number"
+					step="0.01"
+					id="name"
+					name="price"
+					value={ strconv.FormatFloat(pr.Price, 'f', 2, 64) }
+					required
+				/>
+				<input type="submit" value="Change" class="bg-gray-300"/>
+			</form>
+		}
+	</div>
+}

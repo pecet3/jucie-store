@@ -13,7 +13,19 @@ import (
 
 func (c handlers) panelHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		views.PanelPage().Render(r.Context(), w)
+		products, err := c.data.Product.GetAll(c.data.Db)
+		if err != nil {
+			http.Error(w, "products", http.StatusInternalServerError)
+			log.Println(err)
+			return
+		}
+		prices, err := c.data.Price.GetAll(c.data.Db)
+		if err != nil {
+			http.Error(w, "", http.StatusInternalServerError)
+			log.Println(err)
+			return
+		}
+		views.PanelPage(products, prices).Render(r.Context(), w)
 	}
 
 }

@@ -24,7 +24,7 @@ type Product struct {
 
 func (p Product) GetAll(db *sql.DB) ([]Product, error) {
 	query := `
-        SELECT id, name, description, image_url, quantity, price, category, created_at, updated_at
+        SELECT id, name, description, image_url
         FROM products
     `
 	rows, err := db.Query(query)

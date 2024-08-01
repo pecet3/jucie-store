@@ -1,9 +1,14 @@
 package views
 
-import "github.com/pecet3/my-api/views/components"
+import (
+	"github.com/pecet3/my-api/data"
+	"github.com/pecet3/my-api/views/components"
+)
 
-templ PanelPage() {
+templ PanelPage(products []data.Product, prices []data.Price) {
 	@LayoutPanel() {
 		@components.AddProductForm()
+		@components.ProductsDisplay(products)
+		@components.PricesForm(prices)
 	}
 }

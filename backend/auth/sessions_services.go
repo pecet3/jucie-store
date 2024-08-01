@@ -58,7 +58,6 @@ func (as *SessionStore) NewAuthSession(r *http.Request, uId int) (*Session, stri
 		UserIp: utils.GetIP(r),
 		Type:   typeEmail,
 	}
-	log.Println("Generated a new UserSession: ", us)
 	return us, newToken
 }
 
