@@ -48,7 +48,7 @@ func (c handlers) loginAdminHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c handlers) productsHandler(w http.ResponseWriter, r *http.Request) {
+func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		products, err := c.data.Product.GetAll(c.data.Db)
 		if err != nil {
