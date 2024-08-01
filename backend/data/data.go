@@ -20,7 +20,7 @@ func newDb() *sql.DB {
 	}
 
 	prepareList := [2]string{
-		UsersTable,
+		PricesTable,
 		ProductsTable,
 	}
 
@@ -29,8 +29,10 @@ func newDb() *sql.DB {
 			log.Fatalf("Failed to prepare DB: %v", err)
 		}
 	}
+	insertPrices(db)
+	log.Println("<DB> Prices have been inserted successfully")
 
-	log.Println("Preparing DB has been finished")
+	log.Println("<DB> Preparing DB has been finished")
 	return db
 }
 
@@ -52,14 +54,14 @@ func prepare(db *sql.DB, table string) error {
 
 type Data struct {
 	Db      *sql.DB
-	User    User
+	Price   Price
 	Product Product
 }
 
 func New() Data {
 	return Data{
 		Db:      newDb(),
-		User:    User{},
+		Price:   Price{},
 		Product: Product{},
 	}
 }
