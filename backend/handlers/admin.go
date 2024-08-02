@@ -76,7 +76,7 @@ func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Error retrieving file", http.StatusBadRequest)
 			return
 		}
-		path, err := c.storage.AddImage(file, header, "")
+		path, err := c.storage.AddImage(file, header, "/images")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, "Error Saving or compressing a file", http.StatusInternalServerError)
@@ -87,7 +87,7 @@ func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 			Description: description,
 			ImageURL:    path,
 		}
-
+		log.Println(path)
 		_, err = product.Add(c.data.Db, name, description, path)
 		if err != nil {
 			http.Error(w, "Failed to add product", http.StatusInternalServerError)

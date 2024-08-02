@@ -7,8 +7,13 @@ import (
 
 templ PanelPage(products []data.Product, prices []data.Price) {
 	@LayoutPanel() {
-		@components.AddProductForm()
-		@components.ProductsDisplay(products)
-		@components.PricesForm(prices)
+		<div class="flex flex-col">
+			@components.AddProductForm()
+			@components.PricesForm(prices)
+			@components.ProductsDisplay(products)
+		</div>
+		<div class="flex flex-col">
+			products
+		</div>
 	}
 }

@@ -69,9 +69,9 @@ func (m Services) AddImage(file multipart.File, header *multipart.FileHeader, su
 		return "", nil
 	}
 
-	fileName := "juice_" + uuid.NewString()
+	fileName := "juice_" + uuid.NewString() + ext
 
-	out, err := os.Create("./static/products-images/" + subpath + fileName)
+	out, err := os.Create("./static/images/" + subpath + fileName)
 	if err != nil {
 		return "", nil
 	}
@@ -88,5 +88,5 @@ func (m Services) AddImage(file multipart.File, header *multipart.FileHeader, su
 		return "", nil
 	}
 	log.Println("Image upload success: ", fileName)
-	return subpath + fileName, nil
+	return subpath + "/" + fileName, nil
 }

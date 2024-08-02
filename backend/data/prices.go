@@ -2,6 +2,7 @@ package data
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 )
 
@@ -84,6 +85,29 @@ func (pr Price) GetAll(db *sql.DB) ([]Price, error) {
 }
 
 func insertPrices(db *sql.DB) error {
+
+	rows, err := db.Query("SELECT id, capacity, price FROM prices")
+	if err != nil {
+		return nil
+	}
+	defer rows.Close()
+
+	var prices []Price
+	for rows.Next() {
+		var p Price
+		err := rows.Scan(&p.Id, &p.Capacity, &p.Price)
+		if err != nil {
+			return nil
+		}
+		prices = append(prices, p)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil
+	}
+	if len(prices) > 0 {
+		return errors.New("there are prices")
+	}
 	pricesSQL := `
     INSERT INTO prices (capacity, price) VALUES
     (30,  29.99),
@@ -91,7 +115,7 @@ func insertPrices(db *sql.DB) error {
     (100, 69.99)
     `
 
-	_, err := db.Exec(pricesSQL)
+	_, err = db.Exec(pricesSQL)
 	if err != nil {
 		return fmt.Errorf("failed to insert prices: %v", err)
 	}

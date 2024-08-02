@@ -44,7 +44,7 @@ func (s storage) handleUpload(w http.ResponseWriter, r *http.Request) {
 
 func (s storage) serveFileHandler(w http.ResponseWriter, r *http.Request) {
 	filePath := r.URL.Path
-	if _, err := os.Stat("./" + filePath); os.IsNotExist(err) {
+	if _, err := os.Stat("./static/" + filePath); os.IsNotExist(err) {
 		http.Error(w, "File not found", http.StatusNotFound)
 		return
 	}
@@ -62,5 +62,5 @@ func (s storage) serveFileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", mime)
-	http.ServeFile(w, r, "./"+filePath)
+	http.ServeFile(w, r, "./static/"+filePath)
 }
