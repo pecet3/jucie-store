@@ -17,13 +17,13 @@ import (
 const MAX_SIZE = 1024 * 1024 * 10 // 10mb
 
 type StorageServices interface {
-	AddImage(file multipart.File, header *multipart.FileHeader, subpath string) (string, error)
+	AddImage(file multipart.File, header *multipart.FileHeader) (string, error)
 }
 
 type Services struct {
 }
 
-func (m Services) AddImage(file multipart.File, header *multipart.FileHeader, subpath string) (string, error) {
+func (m Services) AddImage(file multipart.File, header *multipart.FileHeader) (string, error) {
 	log.Println("Image start")
 
 	defer file.Close()
@@ -70,8 +70,8 @@ func (m Services) AddImage(file multipart.File, header *multipart.FileHeader, su
 	}
 
 	fileName := "juice_" + uuid.NewString() + ext
-
-	out, err := os.Create("./static/images" + subpath + fileName)
+	imgPath := "/images/" + fileName
+	out, err := os.Create("./static" + imgPath)
 	if err != nil {
 		return "", nil
 	}
@@ -88,5 +88,5 @@ func (m Services) AddImage(file multipart.File, header *multipart.FileHeader, su
 		return "", nil
 	}
 	log.Println("Image upload success: ", fileName)
-	return subpath + "/" + fileName, nil
+	return imgPath, nil
 }

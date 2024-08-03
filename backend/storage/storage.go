@@ -32,7 +32,7 @@ func (s storage) handleUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	path, err := s.methods.AddImage(file, header, "")
+	path, err := s.methods.AddImage(file, header)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "Error Saving or compressing a file", http.StatusInternalServerError)
