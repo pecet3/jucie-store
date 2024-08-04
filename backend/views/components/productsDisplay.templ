@@ -1,13 +1,19 @@
 package components
 
-import "github.com/pecet3/my-api/data"
+import (
+	"github.com/pecet3/my-api/data"
+	"strconv"
+)
 
 templ ProductsDisplay(products []data.Product) {
-	<div>
+	<ul class="">
 		for _, p := range products {
-			<div>{ p.Name }</div>
-			<div>{ p.Description }</div>
-			<img src={ p.ImageURL } alt="photo artykulu"/>
+			<li>
+				<p>{ strconv.Itoa(p.Id) }</p>
+				<div>{ p.Name }</div>
+				<div>{ p.Description }</div>
+				<img src={ p.ImageURL } alt="photo artykulu"/>
+			</li>
 		}
-	</div>
+	</ul>
 }
