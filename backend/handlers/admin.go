@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/pecet3/my-api/data"
 	"github.com/pecet3/my-api/views"
@@ -95,5 +96,43 @@ func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		log.Println("Added a product")
 		http.Redirect(w, r, "/panel", http.StatusSeeOther)
+	}
+}
+
+func (c handlers) pricesHandler(w http.ResponseWriter, r *http.Request) {
+	if r.PostFormValue("_method") == "PUT" {
+		priceId := r.PathValue("id")
+		if priceId == "" {
+			http.Error(w, "not provided ID", http.StatusBadRequest)
+			return
+		}
+		pId, err := strconv.ParseInt(priceId, 10, 64)
+		if err != nil {
+			http.Error(w, "not provided ID", http.StatusBadRequest)
+			return
+		}
+		p, err := c.data.Price.GetById(c.data.Db, int(pId))
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		fp := r.FormValue("price")
+		if fp == "" {
+			http.Error(w, "not provided price", http.StatusBadRequest)
+			return
+		}
+		priceFloat, err := strconv.ParseFloat(fp, 64)
+		if err != nil {
+			http.Error(w, "", http.StatusBadRequest)
+			return
+		}
+		p.Price = priceFloat
+		log.Println(p)
+		err = c.data.Price.UpdatePrice(c.data.Db, p)
+		if err != nil {
+			http.Error(w, "", http.StatusBadRequest)
+			return
+		}
+		w.WriteHeader(http.StatusAccepted)
 	}
 }

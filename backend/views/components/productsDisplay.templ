@@ -6,14 +6,26 @@ import (
 )
 
 templ ProductsDisplay(products []data.Product) {
-	<ul class="">
-		for _, p := range products {
-			<li>
-				<p>{ strconv.Itoa(p.Id) }</p>
-				<div>{ p.Name }</div>
-				<div>{ p.Description }</div>
-				<img src={ p.ImageURL } alt="photo artykulu"/>
-			</li>
-		}
-	</ul>
+	<table class="w-full border-collapse">
+		<thead>
+			<tr>
+				<th class="border border-black">ID</th>
+				<th class="border border-black">Image</th>
+				<th class="border border-black">Name</th>
+				<th class="border border-black">Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			for _, p := range products {
+				<tr>
+					<td class="border border-black">{ strconv.Itoa(p.Id) }</td>
+					<td class="border border-black">
+						<img src={ p.ImageURL } alt="photo artykulu" class="w-20 h-20"/>
+					</td>
+					<td class="border border-black">{ p.Name }</td>
+					<td class="border border-black">{ p.Description }</td>
+				</tr>
+			}
+		</tbody>
+	</table>
 }

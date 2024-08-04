@@ -26,7 +26,7 @@ func LayoutPanel() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><script src=\"https://cdn.tailwindcss.com\"></script><title>Panel Admin</title></head><body class=\"px-64 flex flex-col items-center justify-center bg-gray-300\"><nav class=\"text-white fixed top-0 p-2 bg-gray-600 font-mono w-full\">Brzydki panel admina</nav><div class=\"my-12 flex justify-between mx-auto w-full\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><script src=\"https://cdn.tailwindcss.com\"></script><title>Panel Admin</title></head><body class=\"flex flex-col items-center justify-center bg-gray-300\"><nav class=\"text-white fixed top-0 p-2 bg-gray-600 font-mono w-full\">Brzydki panel admina</nav><div class=\"my-12 mx-auto justify-center grid grid-cols-2 w-full\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

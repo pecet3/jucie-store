@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 )
 
 const PricesTable = `
@@ -45,7 +46,7 @@ func (pr Price) DeletePrice(db *sql.DB, id int) error {
 	return err
 }
 
-func (pr Price) UpdatePrice(db *sql.DB, p Price) error {
+func (pr Price) UpdatePrice(db *sql.DB, p *Price) error {
 	stmt, err := db.Prepare("UPDATE prices SET price = ? WHERE capacity = ?")
 	if err != nil {
 		return err
@@ -58,6 +59,23 @@ func (pr Price) UpdatePrice(db *sql.DB, p Price) error {
 	}
 
 	return nil
+}
+
+func (pr Price) GetById(db *sql.DB, pId int) (*Price, error) {
+	query := "SELECT id, capacity, price FROM prices where id = ?"
+
+	row := db.QueryRow(query, pId)
+
+	var p Price
+	err := row.Scan(&p.Id, &p.Capacity, &p.Price)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("price with id: %d not found", pId)
+		}
+		log.Println(err)
+		return nil, err
+	}
+	return &p, nil
 }
 
 func (pr Price) GetAll(db *sql.DB) ([]Price, error) {

@@ -23,6 +23,6 @@ func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices, ss *auth.Se
 
 	mux.Handle("/panel", ss.AuthorizeAdmin(c.panelHandler))
 	mux.Handle("/products", ss.AuthorizeAdmin(c.productsAdminHandler))
-
+	mux.Handle("/prices/{id}", ss.AuthorizeAdmin(c.pricesHandler))
 	mux.HandleFunc("/login", c.loginAdminHandler)
 }
