@@ -1,8 +1,7 @@
 package components
 
 templ AddProductForm() {
-	<div class=" flex-col flex justify-center items-center m-auto gap-4">
-		<h2>Add a product</h2>
+	<div class=" flex-col flex justify-center items-center m-auto gap-1 p-1">
 		<form
 			id="productForm"
 			action="/products"
@@ -16,7 +15,7 @@ templ AddProductForm() {
 			<textarea id="description" name="description" rows="4" cols="50" required></textarea>
 			<label for="image">Image:</label>
 			<input type="file" id="image" name="image" accept="image/*" required/>
-			<input type="submit" value="Submit Product" class="bg-gray-300"/>
+			<input type="submit" value="Submit Product" class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"/>
 		</form>
 	</div>
 	<script type="text/javascript">

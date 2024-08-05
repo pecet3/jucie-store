@@ -2,7 +2,6 @@ package data
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"log"
 )
@@ -124,7 +123,7 @@ func insertPrices(db *sql.DB) error {
 		return nil
 	}
 	if len(prices) > 0 {
-		return errors.New("there are prices")
+		return nil
 	}
 	pricesSQL := `
     INSERT INTO prices (capacity, price) VALUES
@@ -137,5 +136,7 @@ func insertPrices(db *sql.DB) error {
 	if err != nil {
 		return fmt.Errorf("failed to insert prices: %v", err)
 	}
+	log.Println("<DB> Prices have been inserted successfully")
+
 	return nil
 }

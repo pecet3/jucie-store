@@ -13,6 +13,7 @@ templ ProductsDisplay(products []data.Product) {
 				<th class="border border-black">Image</th>
 				<th class="border border-black">Name</th>
 				<th class="border border-black">Description</th>
+				<th class="border border-black">Actions</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -24,8 +25,54 @@ templ ProductsDisplay(products []data.Product) {
 					</td>
 					<td class="border border-black">{ p.Name }</td>
 					<td class="border border-black">{ p.Description }</td>
+					<td class="border border-black">
+						<button id="editBtn">Edit</button>
+					</td>
+				</tr>
+				<tr id={ "editForm-" + strconv.Itoa(p.Id) } class="hidden">
+					<td colspan="5">
+						<form onsubmit="handleSubmit(event, { strconv.Itoa(p.Id) })" class="p-4 bg-gray-100">
+							<input type="hidden" name="_method" value="PUT"/>
+							<input type="text" name="name" value={ p.Name } class="mb-2 p-2 w-full"/>
+							<input type="text" name="imageURL" value={ p.ImageURL } class="mb-2 p-2 w-full"/>
+							<textarea name="description" class="mb-2 p-2 w-full">{ p.Description }</textarea>
+							<button type="submit" class="bg-blue-500 text-white p-2">Update</button>
+							<button type="button" onclick="hideEditForm({ strconv.Itoa(p.Id) })" class="bg-gray-500 text-white p-2">Cancel</button>
+						</form>
+					</td>
 				</tr>
 			}
 		</tbody>
 	</table>
+	<script>
+		function toggleEditForm(id) {
+			const form = document.getElementById('editForm-' + id);
+			if (form.style.display === 'none') {
+				form.style.display = 'table-row';
+			} else {
+				form.style.display = 'none';
+			}
+		}
+
+		function handleSubmit(event, id) {
+			event.preventDefault();
+			const form = event.target;
+			const formData = new FormData(form);
+
+			fetch('/products/' + id, {
+				method: 'POST',
+				body: formData,
+				headers: {
+					'X-HTTP-Method-Override': 'PUT'
+				}
+			}).then(response => {
+				if (response.ok) {
+					toggleEditForm(id);
+					// Optionally, refresh the page or update the product display
+				} else {
+					alert('Error updating product');
+				}
+			});
+		}
+	</script>
 }

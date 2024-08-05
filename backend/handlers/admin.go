@@ -127,12 +127,11 @@ func (c handlers) pricesHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		p.Price = priceFloat
-		log.Println(p)
 		err = c.data.Price.UpdatePrice(c.data.Db, p)
 		if err != nil {
 			http.Error(w, "", http.StatusBadRequest)
 			return
 		}
-		w.WriteHeader(http.StatusAccepted)
+		http.Redirect(w, r, "/panel", http.StatusSeeOther)
 	}
 }
