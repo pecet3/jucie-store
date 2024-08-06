@@ -134,13 +134,11 @@ func ProductsDisplay(products []data.Product) templ.Component {
 func generateScript(id int) string {
 	return `
     <script>
-
         const form = document.getElementById('form-` + strconv.Itoa(id) + `');
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             const formData = new FormData(form);
 
-            // Usuń pole image, jeśli nie wybrano nowego pliku
             if (formData.get('image').size === 0) {
                 formData.delete('image');
             }
@@ -152,11 +150,9 @@ func generateScript(id int) string {
             .then(response => response.json())
             .then(data => {
                 console.log('Success:', data);
-                // Tutaj możesz dodać kod do obsługi sukcesu, np. odświeżenie widoku
             })
             .catch((error) => {
                 console.error('Error:', error);
-                // Tutaj możesz dodać kod do obsługi błędu
             });
         });
 

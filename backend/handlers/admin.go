@@ -104,7 +104,11 @@ func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "not provided ID", http.StatusBadRequest)
 			return
 		}
-		log.Println("PUT PRODUCT", productId)
+		name := r.FormValue("name")
+		description := r.FormValue("description")
+		file, header, err := r.FormFile("image")
+
+		log.Println("PUT PRODUCT", productId, name, description, file, header, err)
 
 	}
 }
