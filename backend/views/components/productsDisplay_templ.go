@@ -36,16 +36,42 @@ func ProductsDisplay(products []data.Product) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		for _, p := range products {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr><td class=\"border border-black\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr><form id=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var2 string
-			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(p.Id))
+			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs("form-" + strconv.Itoa(p.Id))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 22, Col: 57}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 23, Col: 39}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" enctype=\"multipart/form-data\"><td class=\"border border-black\"><input type=\"hidden\" name=\"id\" value=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(p.Id))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 27, Col: 64}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(p.Id))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 28, Col: 27}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -53,102 +79,87 @@ func ProductsDisplay(products []data.Product) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(p.ImageURL)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 24, Col: 27}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"photo artykulu\" class=\"w-20 h-20\"></td><td class=\"border border-black\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(p.Name)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 26, Col: 45}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border border-black\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
 			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(p.Description)
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(p.ImageURL)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 27, Col: 52}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 31, Col: 28}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"border border-black\"><button onclick=\"showEditForm({ strconv.Itoa(p.Id) })\">Edit</button></td></tr><tr id=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"photo artykulu\" class=\"w-20 h-20\"> <input type=\"file\" name=\"image\" accept=\"image/*\"></td><td class=\"border border-black\"><input type=\"text\" name=\"name\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var6 string
-			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs("editForm-" + strconv.Itoa(p.Id))
+			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(p.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 32, Col: 45}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 35, Col: 52}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"hidden\"><td colspan=\"5\"><form onsubmit=\"handleSubmit(event, { strconv.Itoa(p.Id) })\" class=\"p-4 bg-gray-100\"><input type=\"hidden\" name=\"_method\" value=\"PUT\"> <input type=\"text\" name=\"name\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></td><td class=\"border border-black\"><textarea name=\"description\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var7 string
-			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(p.Name)
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(p.Description)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 36, Col: 52}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 38, Col: 51}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"mb-2 p-2 w-full\"> <input type=\"text\" name=\"imageURL\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</textarea></td><td class=\"border border-black\"><button type=\"submit\">Update</button></td></form></tr>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var8 string
-			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(p.ImageURL)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 37, Col: 60}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"mb-2 p-2 w-full\"> <textarea name=\"description\" class=\"mb-2 p-2 w-full\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var9 string
-			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(p.Description)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 38, Col: 75}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</textarea> <button type=\"submit\" class=\"bg-blue-500 text-white p-2\">Update</button> <button type=\"button\" onclick=\"hideEditForm({ strconv.Itoa(p.Id) })\" class=\"bg-gray-500 text-white p-2\">Cancel</button></form></td></tr>")
+			templ_7745c5c3_Err = templ.Raw(generateScript(p.Id)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table><script>\n\t\tfunction toggleEditForm(id) {\n\t\t\tconst form = document.getElementById('editForm-' + id);\n\t\t\tif (form.style.display === 'none') {\n\t\t\t\tform.style.display = 'table-row';\n\t\t\t} else {\n\t\t\t\tform.style.display = 'none';\n\t\t\t}\n\t\t}\n\n\t\tfunction handleSubmit(event, id) {\n\t\t\tevent.preventDefault();\n\t\t\tconst form = event.target;\n\t\t\tconst formData = new FormData(form);\n\n\t\t\tfetch('/products/' + id, {\n\t\t\t\tmethod: 'POST',\n\t\t\t\tbody: formData,\n\t\t\t\theaders: {\n\t\t\t\t\t'X-HTTP-Method-Override': 'PUT'\n\t\t\t\t}\n\t\t\t}).then(response => {\n\t\t\t\tif (response.ok) {\n\t\t\t\t\ttoggleEditForm(id);\n\t\t\t\t\t// Optionally, refresh the page or update the product display\n\t\t\t\t} else {\n\t\t\t\t\talert('Error updating product');\n\t\t\t\t}\n\t\t\t});\n\t\t}\n\t</script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		return templ_7745c5c3_Err
 	})
+}
+
+func generateScript(id int) string {
+	return `
+    <script>
+
+        const form = document.getElementById('form-` + strconv.Itoa(id) + `');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+
+            // Usuń pole image, jeśli nie wybrano nowego pliku
+            if (formData.get('image').size === 0) {
+                formData.delete('image');
+            }
+
+            fetch('/products/` + strconv.Itoa(id) + `', {
+                method: 'PUT',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // Tutaj możesz dodać kod do obsługi sukcesu, np. odświeżenie widoku
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Tutaj możesz dodać kod do obsługi błędu
+            });
+        });
+
+    </script>
+    `
 }

@@ -19,60 +19,64 @@ templ ProductsDisplay(products []data.Product) {
 		<tbody>
 			for _, p := range products {
 				<tr>
-					<td class="border border-black">{ strconv.Itoa(p.Id) }</td>
-					<td class="border border-black">
-						<img src={ p.ImageURL } alt="photo artykulu" class="w-20 h-20"/>
-					</td>
-					<td class="border border-black">{ p.Name }</td>
-					<td class="border border-black">{ p.Description }</td>
-					<td class="border border-black">
-						<button id="editBtn">Edit</button>
-					</td>
+					<form
+						id={ "form-" + strconv.Itoa(p.Id) }
+						enctype="multipart/form-data"
+					>
+						<td class="border border-black">
+							<input type="hidden" name="id" value={ strconv.Itoa(p.Id) }/>
+							{ strconv.Itoa(p.Id) }
+						</td>
+						<td class="border border-black">
+							<img src={ p.ImageURL } alt="photo artykulu" class="w-20 h-20"/>
+							<input type="file" name="image" accept="image/*"/>
+						</td>
+						<td class="border border-black">
+							<input type="text" name="name" value={ p.Name }/>
+						</td>
+						<td class="border border-black">
+							<textarea name="description">{ p.Description }</textarea>
+						</td>
+						<td class="border border-black">
+							<button type="submit">Update</button>
+						</td>
+					</form>
 				</tr>
-				<tr id={ "editForm-" + strconv.Itoa(p.Id) } class="hidden">
-					<td colspan="5">
-						<form onsubmit="handleSubmit(event, { strconv.Itoa(p.Id) })" class="p-4 bg-gray-100">
-							<input type="hidden" name="_method" value="PUT"/>
-							<input type="text" name="name" value={ p.Name } class="mb-2 p-2 w-full"/>
-							<input type="text" name="imageURL" value={ p.ImageURL } class="mb-2 p-2 w-full"/>
-							<textarea name="description" class="mb-2 p-2 w-full">{ p.Description }</textarea>
-							<button type="submit" class="bg-blue-500 text-white p-2">Update</button>
-							<button type="button" onclick="hideEditForm({ strconv.Itoa(p.Id) })" class="bg-gray-500 text-white p-2">Cancel</button>
-						</form>
-					</td>
-				</tr>
+				@templ.Raw(generateScript(p.Id))
 			}
 		</tbody>
 	</table>
-	<script>
-		function toggleEditForm(id) {
-			const form = document.getElementById('editForm-' + id);
-			if (form.style.display === 'none') {
-				form.style.display = 'table-row';
-			} else {
-				form.style.display = 'none';
-			}
-		}
+}
 
-		function handleSubmit(event, id) {
-			event.preventDefault();
-			const form = event.target;
-			const formData = new FormData(form);
+func generateScript(id int) string {
+	return `
+    <script>
 
-			fetch('/products/' + id, {
-				method: 'POST',
-				body: formData,
-				headers: {
-					'X-HTTP-Method-Override': 'PUT'
-				}
-			}).then(response => {
-				if (response.ok) {
-					toggleEditForm(id);
-					// Optionally, refresh the page or update the product display
-				} else {
-					alert('Error updating product');
-				}
-			});
-		}
-	</script>
+        const form = document.getElementById('form-` + strconv.Itoa(id) + `');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+
+            // Usuń pole image, jeśli nie wybrano nowego pliku
+            if (formData.get('image').size === 0) {
+                formData.delete('image');
+            }
+
+            fetch('/products/` + strconv.Itoa(id) + `', {
+                method: 'PUT',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // Tutaj możesz dodać kod do obsługi sukcesu, np. odświeżenie widoku
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Tutaj możesz dodać kod do obsługi błędu
+            });
+        });
+
+    </script>
+    `
 }

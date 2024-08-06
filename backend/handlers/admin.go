@@ -69,6 +69,7 @@ func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 		components.ProductsDisplay(products).Render(r.Context(), w)
 	}
 	if r.Method == "POST" {
+		log.Println("POST PRODUCT")
 		name := r.FormValue("name")
 		description := r.FormValue("description")
 		file, header, err := r.FormFile("image")
@@ -96,6 +97,15 @@ func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		log.Println("Added a product")
 		http.Redirect(w, r, "/panel", http.StatusSeeOther)
+	}
+	if r.Method == "PUT" {
+		productId := r.PathValue("id")
+		if productId == "" {
+			http.Error(w, "not provided ID", http.StatusBadRequest)
+			return
+		}
+		log.Println("PUT PRODUCT", productId)
+
 	}
 }
 
