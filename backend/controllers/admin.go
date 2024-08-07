@@ -143,7 +143,7 @@ func (c controllers) productsAdminHandler(w http.ResponseWriter, r *http.Request
 			http.Error(w, "Failed to update a product", http.StatusInternalServerError)
 			return
 		}
-		w.WriteHeader(http.StatusAccepted)
+		w.WriteHeader(http.StatusOK)
 	}
 }
 
