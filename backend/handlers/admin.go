@@ -143,8 +143,7 @@ func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Failed to update a product", http.StatusInternalServerError)
 			return
 		}
-		log.Println("PUT PRODUCT", productId, name, description, file, header, err)
-		http.Redirect(w, r, "/panel", http.StatusSeeOther)
+		w.WriteHeader(http.StatusAccepted)
 	}
 }
 
