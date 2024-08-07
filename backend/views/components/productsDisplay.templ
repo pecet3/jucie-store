@@ -56,21 +56,10 @@ func generateScript(id int) string {
             event.preventDefault();
             const formData = new FormData(form);
 
-            if (formData.get('image').size === 0) {
-                formData.delete('image');
-            }
-
             fetch('/products/` + strconv.Itoa(id) + `', {
                 method: 'PUT',
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
         });
 
     </script>

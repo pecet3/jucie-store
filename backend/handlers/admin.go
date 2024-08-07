@@ -89,7 +89,6 @@ func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 			Description: description,
 			ImageURL:    path,
 		}
-		log.Println(path)
 		_, err = product.Add(c.data.Db, name, description, path)
 		if err != nil {
 			http.Error(w, "Failed to add product", http.StatusInternalServerError)
@@ -104,12 +103,48 @@ func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "not provided ID", http.StatusBadRequest)
 			return
 		}
+		pId, err := strconv.ParseInt(productId, 10, 64)
+		if err != nil {
+			http.Error(w, "not provided ID", http.StatusBadRequest)
+			return
+		}
+		p, err := c.data.Product.GetById(c.data.Db, int(pId))
+		if err != nil {
+			http.Error(w, "Failed to update a product", http.StatusInternalServerError)
+			return
+		}
 		name := r.FormValue("name")
+		if name != "" && name != p.Name {
+			p.Name = name
+		}
 		description := r.FormValue("description")
+		if description != "" && description != p.Description {
+			p.Description = description
+		}
 		file, header, err := r.FormFile("image")
-
+		if err != nil {
+			if file != nil || header != nil {
+				http.Error(w, "Failed to update a product, file err", http.StatusInternalServerError)
+				return
+			}
+		}
+		if file != nil {
+			path, err := c.storage.AddImage(file, header)
+			if err != nil {
+				log.Println(err, "update")
+				http.Error(w, "Failed to update a product, file upload err", http.StatusInternalServerError)
+				return
+			}
+			p.ImageURL = path
+		}
+		err = c.data.Product.Update(c.data.Db, p)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, "Failed to update a product", http.StatusInternalServerError)
+			return
+		}
 		log.Println("PUT PRODUCT", productId, name, description, file, header, err)
-
+		http.Redirect(w, r, "/panel", http.StatusSeeOther)
 	}
 }
 

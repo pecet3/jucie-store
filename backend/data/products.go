@@ -95,9 +95,9 @@ func (p Product) RemoveById(db *sql.DB, id int) error {
 	return nil
 }
 
-func (p Product) Edit(db *sql.DB, id int, name, description, imageURL string) error {
+func (p Product) Update(db *sql.DB, pr *Product) error {
 	query := "UPDATE products SET name = ?, description = ?, image_url = ? WHERE id = ?"
-	_, err := db.Exec(query, name, description, imageURL, id)
+	_, err := db.Exec(query, pr.Name, pr.Description, pr.ImageURL, pr.Id)
 	if err != nil {
 		log.Println(err)
 		return err

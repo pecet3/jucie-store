@@ -46,17 +46,11 @@ func (pr Price) DeletePrice(db *sql.DB, id int) error {
 }
 
 func (pr Price) UpdatePrice(db *sql.DB, p *Price) error {
-	stmt, err := db.Prepare("UPDATE prices SET price = ? WHERE capacity = ?")
+	query := "UPDATE prices SET price = ? WHERE capacity = ?"
+	_, err := db.Exec(query, p.Price, p.Capacity)
 	if err != nil {
 		return err
 	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec(p.Price, p.Capacity)
-	if err != nil {
-		return err
-	}
-
 	return nil
 }
 
