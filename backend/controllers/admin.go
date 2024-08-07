@@ -1,4 +1,4 @@
-package handlers
+package controllers
 
 import (
 	"log"
@@ -11,7 +11,7 @@ import (
 	"github.com/pecet3/my-api/views/components"
 )
 
-func (c handlers) panelHandler(w http.ResponseWriter, r *http.Request) {
+func (c controllers) panelHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		products, err := c.data.Product.GetAll(c.data.Db)
 		if err != nil {
@@ -29,7 +29,7 @@ func (c handlers) panelHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
-func (c handlers) loginAdminHandler(w http.ResponseWriter, r *http.Request) {
+func (c controllers) loginAdminHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		views.LoginPage().Render(r.Context(), w)
 		return
@@ -44,8 +44,8 @@ func (c handlers) loginAdminHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("New panel login")
 
 		if name == formUser && password == formPassword {
-			us, token := c.sessionStore.NewAuthSession(r, 123)
-			c.sessionStore.AddAuthSession(token, us)
+			us, token := c.sessionStore.NewAdminSession(r, 123)
+			c.sessionStore.AddAdminSession(token, us)
 			http.SetCookie(w, &http.Cookie{
 				Name:    "session_token",
 				Value:   token,
@@ -60,7 +60,7 @@ func (c handlers) loginAdminHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
+func (c controllers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		products, err := c.data.Product.GetAll(c.data.Db)
 		if err != nil {
@@ -147,7 +147,7 @@ func (c handlers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (c handlers) pricesHandler(w http.ResponseWriter, r *http.Request) {
+func (c controllers) pricesHandler(w http.ResponseWriter, r *http.Request) {
 	if r.PostFormValue("_method") == "PUT" {
 		priceId := r.PathValue("id")
 		if priceId == "" {

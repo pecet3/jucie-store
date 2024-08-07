@@ -20,48 +20,33 @@ type Session struct {
 	Token        string
 	ActivateCode string
 	UserIp       string
-	Email        string
 	Type         string
 }
 
 type SessionStore struct {
 	AuthSessions  map[string]*Session
 	sMu           sync.RWMutex
-	EmailSessions map[string]*Session
+	AdminSessions map[string]*Session
 	eMu           sync.RWMutex
 	data          data.Data
 }
 type AuthSessions = map[string]*Session
-type EmailSessions = map[string]*Session
+type AdminSessions = map[string]*Session
 
 func NewSessionStore(d data.Data) *SessionStore {
 	return &SessionStore{
 		AuthSessions:  make(AuthSessions),
-		EmailSessions: make(EmailSessions),
+		AdminSessions: make(AdminSessions),
 		data:          d,
 	}
 }
 
 const (
-	typeEmail = "email"
+	typeAdmin = "admin"
 	typeAuth  = "auth"
 )
 
-func (as *SessionStore) NewAuthSession(r *http.Request, uId int) (*Session, string) {
-	newToken := uuid.NewString()
-	expiresAt := time.Now().Add(12 * time.Hour)
-
-	us := &Session{
-		UserId: uId,
-		Expiry: expiresAt,
-		Token:  newToken,
-		UserIp: utils.GetIP(r),
-		Type:   typeEmail,
-	}
-	return us, newToken
-}
-
-func (as *SessionStore) NewEmailSession(r *http.Request, email string, uId int) (*Session, string) {
+func (as *SessionStore) NewAuthSession(r *http.Request, Admin string, uId int) (*Session, string) {
 	expiresAt := time.Now().Add(24 * time.Hour)
 	newToken := uuid.NewString()
 
@@ -74,7 +59,6 @@ func (as *SessionStore) NewEmailSession(r *http.Request, email string, uId int) 
 		Expiry:       expiresAt,
 		ActivateCode: activateCode,
 		UserIp:       utils.GetIP(r),
-		Email:        email,
 		Type:         typeAuth,
 	}
 	return ea, newToken
@@ -101,26 +85,39 @@ func (as *SessionStore) RemoveAuthSession(token string) {
 	delete(as.AuthSessions, token)
 }
 
-func (as *SessionStore) GetEmailSession(token string) (*Session, bool) {
+func (as *SessionStore) NewAdminSession(r *http.Request, uId int) (*Session, string) {
+	newToken := uuid.NewString()
+	expiresAt := time.Now().Add(12 * time.Hour)
+
+	us := &Session{
+		UserId: uId,
+		Expiry: expiresAt,
+		Token:  newToken,
+		UserIp: utils.GetIP(r),
+		Type:   typeAdmin,
+	}
+	return us, newToken
+}
+
+func (as *SessionStore) GetAdminSession(token string) (*Session, bool) {
 	as.sMu.RLock()
 	defer as.sMu.RUnlock()
-	session, exists := as.EmailSessions[token]
-	log.Println(session)
+	session, exists := as.AdminSessions[token]
 	if !exists {
 		return nil, false
 	}
 	return session, true
 }
 
-func (as *SessionStore) AddEmailSession(token string, session *Session) {
+func (as *SessionStore) AddAdminSession(token string, session *Session) {
 	as.eMu.Lock()
 	defer as.eMu.Unlock()
-	as.EmailSessions[token] = session
+	as.AdminSessions[token] = session
 }
-func (as *SessionStore) RemoveEmailSession(token string) {
+func (as *SessionStore) RemoveAdminSession(token string) {
 	as.eMu.Lock()
 	defer as.eMu.Unlock()
-	delete(as.EmailSessions, token)
+	delete(as.AdminSessions, token)
 }
 
 func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
@@ -136,14 +133,18 @@ func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 		}
 		sessionToken := cookie.Value
 		var s *Session
-		s, exists := as.GetAuthSession(sessionToken)
+		s, exists := as.GetAdminSession(sessionToken)
 		if !exists {
 			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 			return
 		}
+		if s.Type != typeAdmin {
+			log.Println("<Auth> Trying to log in AuthSession as AdminSession")
+			http.Error(w, "", http.StatusUnauthorized)
+			return
+		}
 		userIp := utils.GetIP(r)
 		userId := int(s.UserId)
-
 		if s.UserIp != userIp {
 			log.Printf("[!!!] Unauthorized ip: %s wanted to authorize as userID: %v ", userIp, userId)
 			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
@@ -151,7 +152,7 @@ func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 		}
 
 		if s.Expiry.Before(time.Now()) {
-			delete(as.AuthSessions, sessionToken)
+			delete(as.AdminSessions, sessionToken)
 			http.Redirect(w, r, "/auth/refresh-token", http.StatusSeeOther)
 			return
 		}

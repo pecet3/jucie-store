@@ -142,7 +142,11 @@ func generateScript(id int) string {
             fetch('/products/` + strconv.Itoa(id) + `', {
                 method: 'PUT',
                 body: formData
-            })
+            }).then(response=>{
+				if (response.ok){
+					window.location.reload();
+				}
+			})
         });
 
     </script>
