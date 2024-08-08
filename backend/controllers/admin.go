@@ -3,7 +3,6 @@ package controllers
 import (
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/pecet3/my-api/data"
@@ -11,7 +10,7 @@ import (
 	"github.com/pecet3/my-api/views/components"
 )
 
-func (c controllers) panelHandler(w http.ResponseWriter, r *http.Request) {
+func (c controllers) panelController(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		products, err := c.data.Product.GetAll(c.data.Db)
 		if err != nil {
@@ -29,38 +28,14 @@ func (c controllers) panelHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
-func (c controllers) loginAdminHandler(w http.ResponseWriter, r *http.Request) {
+func (c controllers) loginAdminController(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		views.LoginPage().Render(r.Context(), w)
 		return
 	}
-	if r.Method == "POST" {
-		name := os.Getenv("USER_NAME")
-		password := os.Getenv("USER_PASSWORD")
-
-		formUser := r.FormValue("username")
-		formPassword := r.FormValue("password")
-
-		log.Println("New panel login")
-
-		if name == formUser && password == formPassword {
-			us, token := c.sessionStore.NewAdminSession(r, 123)
-			c.sessionStore.AddAdminSession(token, us)
-			http.SetCookie(w, &http.Cookie{
-				Name:    "session_token",
-				Value:   token,
-				Expires: us.Expiry,
-			})
-			http.Redirect(w, r, "/panel", http.StatusSeeOther)
-			return
-		}
-		http.Error(w, "wrong credentials", http.StatusUnauthorized)
-		return
-	}
-
 }
 
-func (c controllers) productsAdminHandler(w http.ResponseWriter, r *http.Request) {
+func (c controllers) productsAdminController(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		products, err := c.data.Product.GetAll(c.data.Db)
 		if err != nil {
@@ -147,7 +122,7 @@ func (c controllers) productsAdminHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (c controllers) pricesHandler(w http.ResponseWriter, r *http.Request) {
+func (c controllers) pricesController(w http.ResponseWriter, r *http.Request) {
 	if r.PostFormValue("_method") == "PUT" {
 		priceId := r.PathValue("id")
 		if priceId == "" {

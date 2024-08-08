@@ -21,13 +21,13 @@ func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices, ss *auth.Se
 		sessionStore: ss,
 	}
 
-	mux.Handle("/panel", ss.AuthorizeAdmin(c.panelHandler))
-	mux.Handle("/products/{id}", ss.AuthorizeAdmin(c.productsAdminHandler))
-	mux.Handle("/prices/{id}", ss.AuthorizeAdmin(c.pricesHandler))
+	mux.Handle("/panel", ss.AuthorizeAdmin(c.panelController))
+	mux.Handle("/products/{id}", ss.AuthorizeAdmin(c.productsAdminController))
+	mux.Handle("/prices/{id}", ss.AuthorizeAdmin(c.pricesController))
 
-	// mux.HandleFunc("/panel", c.panelHandler)
-	// mux.HandleFunc("/products/{id}", c.productsAdminHandler)
-	// mux.HandleFunc("/prices/{id}", c.pricesHandler)
+	// mux.HandleFunc("/panel", c.panelController)
+	// mux.HandleFunc("/products/{id}", c.productsAdminController)
+	// mux.HandleFunc("/prices/{id}", c.pricesController)
 
-	mux.HandleFunc("/login", c.loginAdminHandler)
+	mux.HandleFunc("/login", c.loginAdminController)
 }
