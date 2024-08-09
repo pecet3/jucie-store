@@ -50,8 +50,6 @@ func (as *SessionStore) RemoveAdminSession(token string) {
 func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("admin_token")
-		log.Println(cookie.Value)
-
 		if err != nil {
 			if err == http.ErrNoCookie {
 				http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
@@ -61,10 +59,8 @@ func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 			return
 		}
 		sessionToken := cookie.Value
-		log.Println(sessionToken)
 		var s *Session
 		s, exists := as.GetAdminSession(sessionToken)
-		log.Println(s)
 		if !exists {
 			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 			return

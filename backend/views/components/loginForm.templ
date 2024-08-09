@@ -1,7 +1,7 @@
 package components
 
 templ LoginForm() {
-	<form id="loginForm" class="col-span-2 m-auto max-w-lg flex flex-col items-center">
+	<form action="/auth/login-admin" method="POST" class="col-span-2 m-auto max-w-lg flex flex-col items-center">
 		<div class="mb-4">
 			<label for="username" class="block mb-2 text-sm font-bold text-gray-700">Username</label>
 			<input type="text" id="username" name="username" class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" required/>
@@ -18,30 +18,4 @@ templ LoginForm() {
 			/>
 		</div>
 	</form>
-	<script>
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(this)
-
-    fetch('/auth/login-admin', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Login failed');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Login successful:', data);
-        // Handle successful login here (e.g., redirect, update UI)
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        // Handle login error here (e.g., show error message)
-    });
-});
-</script>
 }

@@ -41,7 +41,7 @@ func (a auth) handleLogin(w http.ResponseWriter, r *http.Request) {
 		us, token := a.ss.NewAuthSession()
 		a.ss.AddAdminSession(token, us)
 		http.SetCookie(w, &http.Cookie{
-			Name:     "session_token",
+			Name:     "huj_token",
 			Value:    token,
 			Expires:  us.Expiry,
 			SameSite: http.SameSiteStrictMode,
@@ -60,8 +60,6 @@ func (a auth) handleAdminLogin(w http.ResponseWriter, r *http.Request) {
 	formUser := r.FormValue("username")
 	formPassword := r.FormValue("password")
 
-	log.Println("New panel login", name, password, formUser, formPassword)
-
 	if name == formUser && password == formPassword {
 		us, token := a.ss.NewAdminSession(r, 123)
 		a.ss.AddAdminSession(token, us)
@@ -72,7 +70,7 @@ func (a auth) handleAdminLogin(w http.ResponseWriter, r *http.Request) {
 			SameSite: http.SameSiteStrictMode,
 			Path:     "/",
 		})
-		http.Redirect(w, r, "/panel", http.StatusFound)
+		http.Redirect(w, r, "/panel", http.StatusSeeOther)
 		return
 	}
 	http.Error(w, "wrong credentials", http.StatusUnauthorized)
