@@ -8,8 +8,6 @@ package views
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/pecet3/my-api/views/components"
-
 func EntryPage() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -28,15 +26,7 @@ func EntryPage() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><script src=\"https://cdn.tailwindcss.com\"></script><title>Panel Admin</title></head><body class=\"flex flex-col items-center justify-center bg-gray-300\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = components.UserLoginForm().Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>PROJEKT JUICE</title><link rel=\"stylesheet\" href=\"style.css\"><script src=\"https://cdn.tailwindcss.com\"></script></head><body class=\"w-full h-full bg-[url(&#39;images/image.png&#39;)] bg-center bg-cover\"><div class=\"min-h-screen w-full h-full px-28 py-5 relative\"><img src=\"images/pjlogo.png\" class=\"w-40 m-4 cursor-pointer\"><div class=\"mt-48 max-w-xl  p-6 flex flex-col items-center\"><h1 class=\"text-6xl font-semibold mb-4 leading-normal text-white step-title\">SECRET CODE</h1><form method=\"POST\" action=\"/auth/login\" class=\"flex flex-col m-auto gap-4 items-center justify-center\"><input type=\"text\" name=\"password\" autofocus class=\"font-light border-4 p-2 text-2xl\n                 bg-transparent text-white\"> <input type=\"submit\" class=\"bg-purple-950 rounded-3xl py-3 px-8 font-medium \n                    hover:bg-transparent hover:border-purple-950 m-auto text-white hover:cursor-pointer\n                      hover:text-white duration-300 hover:border border border-transparent\" value=\"Enter\"></form></div><div class=\"mt-10 \"><img src=\"images/grocery-image.png\" class=\"w-1/2 mx-auto xl:w-1/3 xl:absolute bottom-0 right-60\"></div></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
