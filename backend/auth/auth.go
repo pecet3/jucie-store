@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"os"
@@ -29,19 +28,14 @@ func Run(srv *http.ServeMux, ss *SessionStore, data data.Data) {
 }
 func (a auth) handleLogin(w http.ResponseWriter, r *http.Request) {
 	currentPswd := a.ss.GetCurrentPassword()
-	var dto LoginDto
-	err := json.NewDecoder(r.Body).Decode(&dto)
-	if err != nil {
-		log.Println("<Auth> ", err)
-		http.Error(w, "", http.StatusInternalServerError)
-		return
-	}
-	log.Println(currentPswd)
-	if currentPswd == dto.Password {
+	formPswd := r.FormValue("password")
+	log.Println(currentPswd, formPswd)
+
+	if currentPswd == formPswd {
 		us, token := a.ss.NewAuthSession()
 		a.ss.AddAdminSession(token, us)
 		http.SetCookie(w, &http.Cookie{
-			Name:     "huj_token",
+			Name:     "session_token",
 			Value:    token,
 			Expires:  us.Expiry,
 			SameSite: http.SameSiteStrictMode,
