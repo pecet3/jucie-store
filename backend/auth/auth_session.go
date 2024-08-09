@@ -13,18 +13,16 @@ import (
 
 type AuthSessions = map[string]*Session
 
-func (as *SessionStore) NewAuthSession(r *http.Request, Auth string, uId int) (*Session, string) {
+func (as *SessionStore) NewAuthSession() (*Session, string) {
 	expiresAt := time.Now().Add(24 * time.Hour)
 	newToken := uuid.NewString()
 
 	hash := sha256.New()
 	hash.Write([]byte(newToken))
 	ea := &Session{
-		UserId:       uId,
 		Token:        newToken,
 		Expiry:       expiresAt,
 		ActivateCode: as.Password,
-		UserIp:       utils.GetIP(r),
 		Type:         typeAuth,
 	}
 	return ea, newToken

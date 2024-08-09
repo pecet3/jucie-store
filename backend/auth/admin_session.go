@@ -49,7 +49,9 @@ func (as *SessionStore) RemoveAdminSession(token string) {
 
 func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie("session_token")
+		cookie, err := r.Cookie("admin_token")
+		log.Println(cookie.Value)
+
 		if err != nil {
 			if err == http.ErrNoCookie {
 				http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
@@ -59,8 +61,10 @@ func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 			return
 		}
 		sessionToken := cookie.Value
+		log.Println(sessionToken)
 		var s *Session
 		s, exists := as.GetAdminSession(sessionToken)
+		log.Println(s)
 		if !exists {
 			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 			return
@@ -74,13 +78,13 @@ func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 		userId := int(s.UserId)
 		if s.UserIp != userIp {
 			log.Printf("[!!!] Unauthorized ip: %s wanted to authorize as userID: %v ", userIp, userId)
-			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+			http.Error(w, "", http.StatusUnauthorized)
 			return
 		}
 
 		if s.Expiry.Before(time.Now()) {
 			delete(as.AdminSessions, sessionToken)
-			http.Redirect(w, r, "/auth/refresh-token", http.StatusSeeOther)
+			http.Error(w, "", http.StatusUnauthorized)
 			return
 		}
 		ctx := context.WithValue(r.Context(), &Session{}, s)

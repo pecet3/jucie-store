@@ -32,7 +32,7 @@ func main() {
 	}
 
 	storage.Run(mux, app.data.Db, app.sessions)
-
+	auth.Run(mux, app.sessions, app.data)
 	controllers.Run(mux, app.data, app.storage, app.sessions)
 
 	address := "127.0.0.1:8090"

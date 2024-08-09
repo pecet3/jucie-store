@@ -24,7 +24,7 @@ func (c controllers) panelController(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 			return
 		}
-		views.PanelPage(products, prices).Render(r.Context(), w)
+		views.PanelPage(products, prices, c.sessionStore.Password).Render(r.Context(), w)
 	}
 
 }
