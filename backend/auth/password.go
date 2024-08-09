@@ -1,10 +1,24 @@
 package auth
 
 import (
+	"log"
 	"math/rand"
 	"strconv"
 	"strings"
+	"time"
 )
+
+func changePasswordLoop(as *SessionStore) {
+	for {
+		err := as.CreateNewPassword()
+		if err != nil {
+			log.Panicln(err)
+			break
+		}
+		log.Println("Changed a password: ", as.Password)
+		time.Sleep(1 * time.Minute)
+	}
+}
 
 func generatePassword() string {
 	randomNumber := rand.Intn(9000) + 1000

@@ -30,8 +30,8 @@ func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices, ss *auth.Se
 	// mux.HandleFunc("/products/{id}", c.productsAdminController)
 	// mux.HandleFunc("/prices/{id}", c.pricesController)
 
-	mux.HandleFunc("/login", c.loginAdminController)
-	mux.HandleFunc("/", c.userLoginController)
+	mux.HandleFunc("/login-admin", c.loginAdminController)
+	mux.HandleFunc("/login", c.userLoginController)
 }
 
 func (c controllers) userLoginController(w http.ResponseWriter, r *http.Request) {

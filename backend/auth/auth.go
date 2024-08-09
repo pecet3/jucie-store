@@ -25,6 +25,8 @@ func Run(srv *http.ServeMux, ss *SessionStore, data data.Data) {
 
 	srv.HandleFunc("/auth/login-admin", a.handleAdminLogin)
 	srv.HandleFunc("/auth/login", a.handleLogin)
+
+	go changePasswordLoop(ss)
 }
 func (a auth) handleLogin(w http.ResponseWriter, r *http.Request) {
 	currentPswd := a.ss.GetCurrentPassword()

@@ -52,7 +52,7 @@ func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 		cookie, err := r.Cookie("admin_token")
 		if err != nil {
 			if err == http.ErrNoCookie {
-				http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+				http.Redirect(w, r, "/login-admin", http.StatusPermanentRedirect)
 				return
 			}
 			http.Error(w, "Bad request", http.StatusBadRequest)
@@ -62,7 +62,7 @@ func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 		var s *Session
 		s, exists := as.GetAdminSession(sessionToken)
 		if !exists {
-			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+			http.Redirect(w, r, "/login-admin", http.StatusPermanentRedirect)
 			return
 		}
 		if s.Type != typeAdmin {
