@@ -14,7 +14,6 @@ const (
 )
 
 type Session struct {
-	UserId       int
 	Expiry       time.Time
 	Token        string
 	ActivateCode string
@@ -63,7 +62,7 @@ func cleanUpExpiredSessionsLoop(ss *SessionStore) {
 		}
 		ss.eMu.Unlock()
 		log.Printf("<Auth> Cleaned Expired Sessions, auth: %d, admin: %d", cleanedAuthSessions, cleanedAdminSessions)
-		time.Sleep(1 * time.Hour)
+		time.Sleep(12 * time.Hour)
 
 	}
 }

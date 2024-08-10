@@ -16,7 +16,7 @@ func changePasswordLoop(as *SessionStore) {
 			break
 		}
 		log.Println("Changed a password: ", as.Password)
-		time.Sleep(1 * time.Minute)
+		time.Sleep(168 * time.Hour)
 	}
 }
 

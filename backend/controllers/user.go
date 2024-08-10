@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/pecet3/my-api/utils"
 	"github.com/pecet3/my-api/views"
 )
 
@@ -16,7 +17,6 @@ func (c controllers) userLoginController(w http.ResponseWriter, r *http.Request)
 
 func (c controllers) serveReact(w http.ResponseWriter, r *http.Request) {
 	fs := http.FileServer(http.Dir("./static/dist"))
-	log.Println("server")
 	path := r.URL.Path
 	_, err := os.Stat("./static/dist" + path)
 
@@ -24,6 +24,7 @@ func (c controllers) serveReact(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/dist/index.html")
 		return
 	}
+	log.Printf("<Controllers> User with IP:%s entered the protected react app", utils.GetIP(r))
 
 	fs.ServeHTTP(w, r)
 }

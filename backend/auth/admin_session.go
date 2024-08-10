@@ -12,12 +12,11 @@ import (
 
 type AdminSessions = map[string]*Session
 
-func (as *SessionStore) NewAdminSession(r *http.Request, uId int) (*Session, string) {
+func (as *SessionStore) NewAdminSession(r *http.Request) (*Session, string) {
 	newToken := uuid.NewString()
-	expiresAt := time.Now().Add(12 * time.Hour)
+	expiresAt := time.Now().Add(72 * time.Hour)
 
 	us := &Session{
-		UserId: uId,
 		Expiry: expiresAt,
 		Token:  newToken,
 		UserIp: utils.GetIP(r),
@@ -71,9 +70,8 @@ func (as *SessionStore) AuthorizeAdmin(next http.HandlerFunc) http.Handler {
 			return
 		}
 		userIp := utils.GetIP(r)
-		userId := int(s.UserId)
 		if s.UserIp != userIp {
-			log.Printf("[!!!] Unauthorized ip: %s wanted to authorize as userID: %v ", userIp, userId)
+			log.Printf("[!!!] Unauthorized ip: %s ", userIp)
 			http.Error(w, "", http.StatusUnauthorized)
 			return
 		}

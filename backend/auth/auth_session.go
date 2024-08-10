@@ -13,7 +13,7 @@ import (
 type AuthSessions = map[string]*Session
 
 func (as *SessionStore) NewAuthSession() (*Session, string) {
-	expiresAt := time.Now().Add(24 * time.Hour)
+	expiresAt := time.Now().Add(1 * time.Minute)
 	newToken := uuid.NewString()
 
 	hash := sha256.New()
@@ -51,7 +51,6 @@ func (as *SessionStore) RemoveAuthSession(token string) {
 func (as *SessionStore) AuthorizeAuth(next http.HandlerFunc) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("session_token")
-		log.Println(cookie)
 		if err != nil {
 			if err == http.ErrNoCookie {
 				http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
@@ -67,7 +66,6 @@ func (as *SessionStore) AuthorizeAuth(next http.HandlerFunc) http.Handler {
 			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 			return
 		}
-		log.Println(s)
 		if s.Type != typeAuth {
 			log.Println("<Auth> Trying to log in AdminSession as AuthSession")
 			http.Error(w, "", http.StatusUnauthorized)

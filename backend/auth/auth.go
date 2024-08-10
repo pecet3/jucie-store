@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/pecet3/my-api/data"
+	"github.com/pecet3/my-api/utils"
 )
 
 type auth struct {
@@ -32,7 +33,8 @@ func Run(srv *http.ServeMux, ss *SessionStore, data data.Data) {
 func (a auth) handleLogin(w http.ResponseWriter, r *http.Request) {
 	currentPswd := a.ss.GetCurrentPassword()
 	formPswd := r.FormValue("password")
-	log.Println(currentPswd, formPswd)
+	log.Printf("<Auth> User with IP:%s tries to login, currentPswd: %s, formPswd: %s",
+		utils.GetIP(r), currentPswd, formPswd)
 
 	if currentPswd == formPswd {
 		us, token := a.ss.NewAuthSession()
@@ -47,7 +49,7 @@ func (a auth) handleLogin(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	http.Error(w, "wrong credentials", http.StatusUnauthorized)
+	w.WriteHeader(http.StatusUnauthorized)
 }
 
 func (a auth) handleAdminLogin(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +60,7 @@ func (a auth) handleAdminLogin(w http.ResponseWriter, r *http.Request) {
 	formPassword := r.FormValue("password")
 
 	if name == formUser && password == formPassword {
-		us, token := a.ss.NewAdminSession(r, 123)
+		us, token := a.ss.NewAdminSession(r)
 		a.ss.AddAdminSession(token, us)
 		http.SetCookie(w, &http.Cookie{
 			Name:     "admin_token",
