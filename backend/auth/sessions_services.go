@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"log"
 	"sync"
 	"time"
 
@@ -37,5 +38,32 @@ func NewSessionStore(d data.Data) *SessionStore {
 		AdminSessions: make(AdminSessions),
 		data:          d,
 		Password:      generatePassword(),
+	}
+}
+
+func cleanUpExpiredSessionsLoop(ss *SessionStore) {
+	for {
+		cleanedAuthSessions := 0
+		ss.sMu.Lock()
+		for token, session := range ss.AuthSessions {
+			if time.Now().After(session.Expiry) {
+				delete(ss.AuthSessions, token)
+				cleanedAuthSessions++
+			}
+		}
+		ss.sMu.Unlock()
+
+		cleanedAdminSessions := 0
+		ss.eMu.Lock()
+		for token, session := range ss.AdminSessions {
+			if time.Now().After(session.Expiry) {
+				delete(ss.AdminSessions, token)
+				cleanedAdminSessions++
+			}
+		}
+		ss.eMu.Unlock()
+		log.Printf("<Auth> Cleaned Expired Sessions, auth: %d, admin: %d", cleanedAuthSessions, cleanedAdminSessions)
+		time.Sleep(1 * time.Hour)
+
 	}
 }

@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/pecet3/my-api/utils"
 )
 
 type AuthSessions = map[string]*Session
@@ -52,6 +51,7 @@ func (as *SessionStore) RemoveAuthSession(token string) {
 func (as *SessionStore) AuthorizeAuth(next http.HandlerFunc) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("session_token")
+		log.Println(cookie)
 		if err != nil {
 			if err == http.ErrNoCookie {
 				http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
@@ -67,22 +67,10 @@ func (as *SessionStore) AuthorizeAuth(next http.HandlerFunc) http.Handler {
 			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 			return
 		}
+		log.Println(s)
 		if s.Type != typeAuth {
-			log.Println("<Auth> Trying to log in AuthSession as AuthSession")
+			log.Println("<Auth> Trying to log in AdminSession as AuthSession")
 			http.Error(w, "", http.StatusUnauthorized)
-			return
-		}
-		userIp := utils.GetIP(r)
-		userId := int(s.UserId)
-		if s.UserIp != userIp {
-			log.Printf("[!!!] Unauthorized ip: %s wanted to authorize as userID: %v ", userIp, userId)
-			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
-			return
-		}
-
-		if s.Expiry.Before(time.Now()) {
-			delete(as.AuthSessions, sessionToken)
-			http.Redirect(w, r, "/auth/refresh-token", http.StatusSeeOther)
 			return
 		}
 		ctx := context.WithValue(r.Context(), &Session{}, s)

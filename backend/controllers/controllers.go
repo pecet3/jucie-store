@@ -6,7 +6,6 @@ import (
 	"github.com/pecet3/my-api/auth"
 	"github.com/pecet3/my-api/data"
 	"github.com/pecet3/my-api/storage"
-	"github.com/pecet3/my-api/views"
 )
 
 type controllers struct {
@@ -32,10 +31,5 @@ func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices, ss *auth.Se
 
 	mux.HandleFunc("/login-admin", c.loginAdminController)
 	mux.HandleFunc("/login", c.userLoginController)
-}
-
-func (c controllers) userLoginController(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		views.EntryPage().Render(r.Context(), w)
-	}
+	mux.Handle("/", ss.AuthorizeAuth(c.serveReact))
 }

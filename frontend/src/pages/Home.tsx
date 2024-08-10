@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { MainWrapper } from "../components/MainWrapper";
 import walter from "../assets/grocery-image.png"
 
