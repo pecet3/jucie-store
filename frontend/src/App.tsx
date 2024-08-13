@@ -5,8 +5,9 @@ import { Home } from './pages/Home'
 import { Navbar } from './components/Navbar'
 import { How } from './pages/How'
 import { Products } from './pages/Products'
-import { StoreProvider, useStoreContext } from './utils/storeContext'
+import { useStoreContext } from './utils/storeContext'
 import { useEffect } from 'react'
+import { Product } from './pages/Product'
 
 function App() {
   const { addProducts, addPrices } = useStoreContext()
@@ -39,6 +40,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/how" element={<How />} />
         <Route path='/juices' element={<Products />} />
+        <Route path="/juices/:id" element={<Product />} />
       </Routes>
     </>
   )

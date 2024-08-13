@@ -12,6 +12,9 @@ export default defineConfig({
       },
       '/api/prices': {
         target: "http://127.0.0.1:8090/"
+      },
+      '/images/': {
+        target: "http://127.0.0.1:8090/"
       }
     }
   }

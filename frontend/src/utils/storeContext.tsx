@@ -5,6 +5,7 @@ import { Price, Product } from './types';
 type StoreContextType = {
     products: Product[]
     addProducts: (products: Product[]) => void
+    getProductById: (id: number) => Product | undefined
     prices: Price[]
     addPrices: (prices: Price[]) => void
 }
@@ -16,6 +17,9 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const addProducts = (products: Product[]) => {
         setProducts(products);
     };
+    const getProductById = (id: number) => {
+        return products.find(p => p.id = id)
+    }
 
     const [prices, setPrices] = useState<Price[]>([])
     const addPrices = (prices: Price[]) => {
@@ -23,7 +27,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
 
     return (
-        <StoreContext.Provider value={{ products, addProducts, prices, addPrices }}>
+        <StoreContext.Provider value={{ products, addProducts, getProductById, prices, addPrices }}>
             {children}
         </StoreContext.Provider>
     );
