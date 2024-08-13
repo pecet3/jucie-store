@@ -7,7 +7,6 @@ import (
 
 	"github.com/pecet3/my-api/data"
 	"github.com/pecet3/my-api/views"
-	"github.com/pecet3/my-api/views/components"
 )
 
 func (c controllers) panelController(w http.ResponseWriter, r *http.Request) {
@@ -34,15 +33,38 @@ func (c controllers) loginAdminController(w http.ResponseWriter, r *http.Request
 		return
 	}
 }
+func (c controllers) productsController(w http.ResponseWriter, r *http.Request) {
 
-func (c controllers) productsAdminController(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		products, err := c.data.Product.GetAll(c.data.Db)
-		if err != nil {
-			http.Error(w, "", http.StatusInternalServerError)
-		}
-		components.ProductsDisplay(products).Render(r.Context(), w)
+	log.Println("POST PRODUCT")
+	name := r.FormValue("name")
+	description := r.FormValue("description")
+	file, header, err := r.FormFile("image")
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Error retrieving file", http.StatusBadRequest)
+		return
 	}
+	path, err := c.storage.AddImage(file, header)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Error Saving or compressing a file", http.StatusInternalServerError)
+		return
+	}
+	product := data.Product{
+		Name:        name,
+		Description: description,
+		ImageURL:    path,
+	}
+	_, err = product.Add(c.data.Db, name, description, path)
+	if err != nil {
+		http.Error(w, "Failed to add product", http.StatusInternalServerError)
+		return
+	}
+	log.Println("Added a product")
+	http.Redirect(w, r, "/panel", http.StatusSeeOther)
+
+}
+func (c controllers) productController(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		log.Println("POST PRODUCT")
 		name := r.FormValue("name")

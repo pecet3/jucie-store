@@ -18,11 +18,13 @@ function App() {
         const productsResponse = await fetch('/api/products');
         const productsData = await productsResponse.json();
         addProducts(productsData);
-
+        console.log(productsData)
         // Fetch prices
         const pricesResponse = await fetch('/api/prices');
         const pricesData = await pricesResponse.json();
         addPrices(pricesData);
+        console.log(pricesData)
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }

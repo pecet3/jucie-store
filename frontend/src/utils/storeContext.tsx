@@ -14,12 +14,12 @@ const StoreContext = createContext<StoreContextType | undefined>(undefined);
 export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [products, setProducts] = useState<Product[]>([]);
     const addProducts = (products: Product[]) => {
-        setProducts(prevProducts => [...prevProducts, ...products]);
+        setProducts(products);
     };
 
     const [prices, setPrices] = useState<Price[]>([])
     const addPrices = (prices: Price[]) => {
-        setPrices(prevPrices => [...prevPrices, ...prices])
+        setPrices(prices)
     }
 
     return (
