@@ -5,17 +5,7 @@ import { ProductTile } from "../components/ProductTile";
 import { useEffect } from "react";
 
 export const Products = () => {
-    const { products, addProduct } = useStoreContext()
-    const prod: Product = {
-        name: "test",
-        description: "lorem ipsum",
-        imageUrl: "/images/ONI.png"
-    }
-    useEffect(() => {
-        addProduct(prod)
-    }, [])
-    console.log(products)
-
+    const { products, prices } = useStoreContext()
     return (
         <div className="flex-grow flex flex-col items-center justify-center py-16">
             <h2 className="text-6xl font-bold text-white mb-12 step-title">ULTIMATE</h2>

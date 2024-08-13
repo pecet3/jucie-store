@@ -10,6 +10,7 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/google/uuid"
 )
@@ -24,41 +25,29 @@ type Services struct {
 }
 
 func (m Services) AddImage(file multipart.File, header *multipart.FileHeader) (string, error) {
-	log.Println("Image start")
-
 	defer file.Close()
-
 	// checking a file
-
 	if header.Size > MAX_SIZE {
 		return "", errors.New("buff overflow")
 	}
-
 	ext := filepath.Ext(header.Filename)
-
 	if ext != ".jpg" && ext != ".jpeg" && ext != ".png" {
 		return "", nil
 	}
-
 	// temporary file
-
 	tmpFile, err := os.CreateTemp("", "image-*.tmp")
 	if err != nil {
 		return "", err
 	}
 	defer tmpFile.Close()
-
 	if _, err = io.Copy(tmpFile, file); err != nil {
 		return "", err
 	}
 	if _, err := tmpFile.Seek(0, io.SeekStart); err != nil {
 		return "", err
 	}
-
 	// compressing an image
-
 	var img image.Image
-
 	switch ext {
 	case ".jpg", ".jpeg":
 		img, err = jpeg.Decode(tmpFile)
@@ -68,7 +57,6 @@ func (m Services) AddImage(file multipart.File, header *multipart.FileHeader) (s
 	if err != nil {
 		return "", nil
 	}
-
 	fileName := "juice_" + uuid.NewString() + ext
 	imgPath := "/images/" + fileName
 	out, err := os.Create("./static" + imgPath)
@@ -89,4 +77,15 @@ func (m Services) AddImage(file multipart.File, header *multipart.FileHeader) (s
 	}
 	log.Println("Image upload success: ", fileName)
 	return imgPath, nil
+}
+
+func (s Services) RemoveImage(imgPath string) error {
+	if !strings.HasPrefix(imgPath, "/images/") {
+		return errors.New("wrong image path")
+	}
+	ext := filepath.Ext(imgPath)
+	if ext != ".jpg" && ext != ".png" {
+		return errors.New("wrong image extension")
+	}
+	return nil
 }

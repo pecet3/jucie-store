@@ -9,6 +9,7 @@ import (
 	"github.com/pecet3/my-api/auth"
 	"github.com/pecet3/my-api/controllers"
 	"github.com/pecet3/my-api/data"
+	"github.com/pecet3/my-api/handlers"
 	"github.com/pecet3/my-api/storage"
 )
 
@@ -34,7 +35,7 @@ func main() {
 	storage.Run(mux, app.data.Db, app.sessions)
 	auth.Run(mux, app.sessions, app.data)
 	controllers.Run(mux, app.data, app.storage, app.sessions)
-
+	handlers.Run(mux, app.data, app.sessions)
 	address := "127.0.0.1:8090"
 	server := &http.Server{
 		Addr:    address,

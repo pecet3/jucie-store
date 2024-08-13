@@ -42,6 +42,7 @@ func NewSessionStore(d data.Data) *SessionStore {
 
 func cleanUpExpiredSessionsLoop(ss *SessionStore) {
 	for {
+		time.Sleep(12 * time.Hour)
 		cleanedAuthSessions := 0
 		ss.sMu.Lock()
 		for token, session := range ss.AuthSessions {
@@ -62,7 +63,5 @@ func cleanUpExpiredSessionsLoop(ss *SessionStore) {
 		}
 		ss.eMu.Unlock()
 		log.Printf("<Auth> Cleaned Expired Sessions, auth: %d, admin: %d", cleanedAuthSessions, cleanedAdminSessions)
-		time.Sleep(12 * time.Hour)
-
 	}
 }

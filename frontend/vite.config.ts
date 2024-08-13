@@ -5,12 +5,14 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   plugins: [react()],
   base: "/",
-  // server: {
-  //   proxy: {
-  //     '/': {
-  //       target: '/images',
-  //       changeOrigin: true,
-  //     }
-  //   }
-  // }
+  server: {
+    proxy: {
+      '/api/products': {
+        target: "http://127.0.0.1:8090/"
+      },
+      '/api/prices': {
+        target: "http://127.0.0.1:8090/"
+      }
+    }
+  }
 })

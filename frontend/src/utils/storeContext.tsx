@@ -1,28 +1,29 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Product } from './types';
+import { Price, Product } from './types';
 
 
 type StoreContextType = {
     products: Product[]
-    addProduct: (product: Product) => void
-    removeProduct: (name: string) => void
+    addProducts: (products: Product[]) => void
+    prices: Price[]
+    addPrices: (prices: Price[]) => void
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [products, setProducts] = useState<Product[]>([]);
-
-    const addProduct = (product: Product) => {
-        setProducts(prevProducts => [...prevProducts, product]);
+    const addProducts = (products: Product[]) => {
+        setProducts(prevProducts => [...prevProducts, ...products]);
     };
 
-    const removeProduct = (name: string) => {
-        setProducts(prevProducts => prevProducts.filter(product => product.name !== name));
-    };
+    const [prices, setPrices] = useState<Price[]>([])
+    const addPrices = (prices: Price[]) => {
+        setPrices(prevPrices => [...prevPrices, ...prices])
+    }
 
     return (
-        <StoreContext.Provider value={{ products, addProduct, removeProduct }}>
+        <StoreContext.Provider value={{ products, addProducts, prices, addPrices }}>
             {children}
         </StoreContext.Provider>
     );
