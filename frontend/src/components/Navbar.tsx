@@ -1,6 +1,7 @@
 import pjlogo from "../assets/pjlogo.png"
 import cart from "../assets/cart.png"
 import { Link } from "react-router-dom"
+import { FaShoppingBasket } from "react-icons/fa"
 export const Navbar = () => {
 
     return (
@@ -15,13 +16,14 @@ export const Navbar = () => {
                     </Link>
                 </li>
                 <li className="list-none inline-block px-5">
-                    <a href="/juices" className="no-underline text-white px-2 font-semibold">JUICES</a>
+                    <Link to="/juices" className="no-underline text-white px-2 font-semibold">JUICES</Link>
                 </li>
                 <li className="list-none inline-block px-5">
-                    <a href="/contact" className="no-underline text-white px-2 font-semibold">CONTACT</a>
+                    <Link to="/contact" className="no-underline text-white px-2 font-semibold">CONTACT</Link>
                 </li>
             </ul>
-            <img src={cart} className="w-8 cursor-pointer" />
+            <FaShoppingBasket size={36} />
+
         </nav>
     )
 }

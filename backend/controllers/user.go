@@ -11,7 +11,7 @@ import (
 
 func (c controllers) userLoginController(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		views.EntryPage().Render(r.Context(), w)
+		views.UserLoginPage().Render(r.Context(), w)
 	}
 }
 

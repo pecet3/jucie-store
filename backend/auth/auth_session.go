@@ -13,7 +13,7 @@ import (
 type AuthSessions = map[string]*Session
 
 func (as *SessionStore) NewAuthSession() (*Session, string) {
-	expiresAt := time.Now().Add(1 * time.Minute)
+	expiresAt := time.Now().Add(168 * 4 * time.Hour)
 	newToken := uuid.NewString()
 
 	hash := sha256.New()
