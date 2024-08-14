@@ -18,7 +18,9 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setProducts(products);
     };
     const getProductById = (id: number) => {
-        return products.find(p => p.id = id)
+        const product = products.find(p => p.id === id)
+        console.log(product)
+        return product
     }
 
     const [prices, setPrices] = useState<Price[]>([])
