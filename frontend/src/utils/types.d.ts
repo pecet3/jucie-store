@@ -10,3 +10,11 @@ export type Price = {
     price: number
     capacity: number
 }
+
+export type BasketItem = {
+    productId: number
+    productName: string
+    capacity: number
+    price: number
+    strength: number
+}

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Price, Product } from './types';
+import { BasketItem, Price, Product } from './types';
 
 
 type StoreContextType = {
@@ -34,6 +34,10 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const addPrices = (prices: Price[]) => {
         setPrices(prices)
     }
+
+    const [basket, setBasket] = useState<BasketItem[]>([])
+
+
     return (
         <StoreContext.Provider value={{ products, addProducts, getProductById, prices, addPrices }}>
             {children}
