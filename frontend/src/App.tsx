@@ -25,7 +25,7 @@ function App() {
         addPrices(pricesData);
         console.log(pricesData)
         setTimeout(() => setIsLoading(false)
-          , 5000)
+          , 1000)
       } catch (error) {
         console.error('Error fetching data:', error);
       }

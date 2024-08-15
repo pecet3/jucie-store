@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { BasketItem, Price, Product } from './types';
 
 
@@ -43,7 +43,14 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setPrices(prices)
     }
 
-    const [basket, setBasket] = useState<BasketItem[]>([])
+    const [basket, setBasket] = useState<BasketItem[]>(() => {
+        const savedBasket = localStorage.getItem('basket')
+        return savedBasket ? JSON.parse(savedBasket) : []
+    })
+    useEffect(() => {
+        localStorage.setItem('basket', JSON.stringify(basket))
+    }, [basket])
+
     const addItemToBasket = (newItem: BasketItem) => {
         const existingItem = basket.find(item =>
             item.product.id === newItem.product.id
