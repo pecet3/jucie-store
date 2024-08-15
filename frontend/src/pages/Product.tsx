@@ -21,14 +21,14 @@ export const Product = () => {
         if (!capacity) return;
 
         const basketItem: BasketItem = {
-            productId: Number(id),
-            productName: product!.name,
+            product: product!,
             strength: Number(strength),
             capacity: capacity,
             price: Number(price),
             quantity: quantity,
         }
         addItemToBasket(basketItem)
+        setQuantity(1)
         toast.success(`Added ${product?.name} to the basket`)
     };
     useEffect(() => {
