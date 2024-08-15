@@ -15,7 +15,7 @@ export const NavBasket = () => {
                         <p>{i.product.name}</p>
                         <p>{i.strength} MG</p>
                         <p>{i.capacity} ML</p>
-                        <span>
+                        <span className="flex flex-col">
                             <button onClick={() => changeItemQuantity(i, i.quantity + 1)}>+</button>
                             {i.quantity}
                             <button onClick={() => changeItemQuantity(i, i.quantity - 1)}>-</button>

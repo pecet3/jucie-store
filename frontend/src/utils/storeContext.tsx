@@ -42,21 +42,36 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const [basket, setBasket] = useState<BasketItem[]>([])
     const addItemToBasket = (newItem: BasketItem) => {
-        const existingItem = basket.find(item => item.product.id === newItem.product.id && item.capacity === newItem.capacity && item.strength === newItem.strength)
+        const existingItem = basket.find(item =>
+            item.product.id === newItem.product.id
+            && item.capacity === newItem.capacity
+            && item.strength === newItem.strength)
+
         if (existingItem) {
-            setBasket(prev => prev.map(i => i.product.id === existingItem.product.id ? { ...i, quantity: i.quantity + newItem.quantity } : i))
+            setBasket(prev => prev.map(i =>
+                i.product.id === existingItem.product.id
+                    && i.capacity === existingItem.capacity
+                    && i.strength === existingItem.strength
+                    ? { ...i, quantity: i.quantity + newItem.quantity } : i))
             return
         }
         setBasket(prev => [...prev, newItem])
         return
     }
     const changeItemQuantity = (item: BasketItem, quantity: number) => {
-        const existingItem = basket.find(i => i.product.id === item.product.id && i.capacity === item.capacity && i.strength === item.strength)
+        const existingItem = basket.find(i =>
+            i.product.id === item.product.id
+            && i.capacity === item.capacity
+            && i.strength === item.strength)
         if (!existingItem) return
         if (quantity <= 0) {
-            setBasket(basket.filter(i => i.product.id !== item.product.id && i.capacity !== item.capacity && i.strength !== i.strength))
+            setBasket(basket.filter(i => i !== existingItem))
         }
-        setBasket(prev => prev.map(i => i.product.id === existingItem.product.id ? { ...i, quantity: quantity } : i))
+        setBasket(prev => prev.map(i =>
+            i.product.id === existingItem.product.id
+                && i.capacity === existingItem.capacity
+                && i.strength === existingItem.strength
+                ? { ...i, quantity: quantity } : i))
         return
     }
     const itemsCount = ((): number => {
