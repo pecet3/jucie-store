@@ -8,28 +8,39 @@ type StoreContextType = {
     getProductById: (id: number) => Product | undefined
     prices: Price[]
     addPrices: (prices: Price[]) => void
+    getInitialPrice: () => Price | undefined
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [products, setProducts] = useState<Product[]>([]);
+    const [products, setProducts] = useState<Product[]>([{
+        id: 0,
+        name: "",
+        image_url: "",
+        description: "",
+    }]);
     const addProducts = (products: Product[]) => {
         setProducts(products);
     };
     const getProductById = (id: number) => {
-        const product = products.find(p => p.id === id)
-        console.log(product)
-        return product
+        return products.find(p => p.id === id)
     }
 
-    const [prices, setPrices] = useState<Price[]>([])
+    const [prices, setPrices] = useState<Price[]>([{
+        id: 0,
+        price: 0,
+        capacity: 0
+    }])
     const addPrices = (prices: Price[]) => {
         setPrices(prices)
     }
+    const getInitialPrice = () => {
+        return prices.find(p => p.id === 1)
+    }
 
     return (
-        <StoreContext.Provider value={{ products, addProducts, getProductById, prices, addPrices }}>
+        <StoreContext.Provider value={{ products, addProducts, getProductById, prices, addPrices, getInitialPrice }}>
             {children}
         </StoreContext.Provider>
     );
