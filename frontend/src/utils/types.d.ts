@@ -17,4 +17,5 @@ export type BasketItem = {
     capacity: number
     price: number
     strength: number
+    quantity: number
 }

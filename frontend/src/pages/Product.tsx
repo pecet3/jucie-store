@@ -7,10 +7,14 @@ import toast from "react-hot-toast";
 
 export const Product = () => {
     const { id } = useParams();
-    const { getProductById, prices } = useStoreContext();
+    const { getProductById, prices, addItemToBasket, basket } = useStoreContext();
+
     const product = getProductById(Number(id));
+
     const [strength, setStrength] = useState("3");
     const [price, setPrice] = useState(prices[0].price.toString())
+    const [quantity, setQuantity] = useState(1)
+
     const handleButtonClick = () => {
         if (!strength) return;
         const capacity = prices.find(p => p.price === Number(price))?.capacity
@@ -21,13 +25,15 @@ export const Product = () => {
             productName: product!.name,
             strength: Number(strength),
             capacity: capacity,
-            price: Number(price)
+            price: Number(price),
+            quantity: quantity,
         }
-        console.log(basketItem)
-
-        toast.success(`Added a ${product?.name}`)
+        addItemToBasket(basketItem)
+        toast.success(`Added ${product?.name} to the basket`)
     };
-
+    useEffect(() => {
+        console.log(basket)
+    }, [basket])
     return (
         <div className="flex-grow flex items-center justify-center py-16 relative">
             <div className="w-full max-w-4xl px-4 relative">
@@ -67,12 +73,23 @@ export const Product = () => {
                                     ))}
                                 </select>
                             </div>
-                            <button
-                                className="bg-purple-950 rounded-3xl py-3 px-4 hover:bg-transparent hover:border-purple-950 hover:text-white duration-300 hover:border border border-transparent flex items-center justify-center"
-                                onClick={handleButtonClick}
-                            >
-                                <FaShoppingBasket size={24} />
-                            </button>
+                            <div className="flex flex-col gap-2">
+                                <div className="flex gap-2">
+                                    <button onClick={() => quantity > 0 && setQuantity(prev => prev + 1)} className="p-2 rounded-lg border border-black bg-purple-500 text-white">+</button>
+                                    <span className="font-mono text-4xl">{quantity}</span>
+                                    <button onClick={() => quantity > 1 && setQuantity(prev => prev - 1)} className="p-2 rounded-lg border border-black bg-purple-500 text-white">-</button>
+                                </div>
+                                <button
+                                    className="bg-purple-950 rounded-3xl py-3 px-4 
+                                hover:bg-transparent hover:border-purple-950
+                                 hover:text-white duration-300 hover:border border border-transparent 
+                                 flex items-center justify-center"
+                                    onClick={handleButtonClick}
+                                >
+                                    <FaShoppingBasket size={24} />
+                                </button>
+                            </div>
+
                         </div>
                         <div className="text-center text-2xl font-mono mr-12 mt-4">{price} PLN</div>
                     </div>

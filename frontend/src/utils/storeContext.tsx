@@ -8,6 +8,8 @@ type StoreContextType = {
     getProductById: (id: number) => Product | undefined
     prices: Price[]
     addPrices: (prices: Price[]) => void
+    basket: BasketItem[]
+    addItemToBasket: (newItem: BasketItem) => void
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -37,9 +39,17 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const [basket, setBasket] = useState<BasketItem[]>([])
 
-
+    const addItemToBasket = (newItem: BasketItem) => {
+        const existingItem = basket.find(item => item.productId === newItem.productId && item.capacity === newItem.capacity && item.strength === newItem.strength)
+        if (existingItem) {
+            setBasket(prev => prev.map(i => i.productId === existingItem.productId ? { ...i, quantity: i.quantity + newItem.quantity } : i))
+            return
+        }
+        setBasket(prev => [...prev, newItem])
+        return
+    }
     return (
-        <StoreContext.Provider value={{ products, addProducts, getProductById, prices, addPrices }}>
+        <StoreContext.Provider value={{ products, addProducts, getProductById, prices, addPrices, basket, addItemToBasket }}>
             {children}
         </StoreContext.Provider>
     );
