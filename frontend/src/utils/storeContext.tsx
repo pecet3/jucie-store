@@ -8,7 +8,6 @@ type StoreContextType = {
     getProductById: (id: number) => Product | undefined
     prices: Price[]
     addPrices: (prices: Price[]) => void
-    getInitialPrice: () => Price | undefined
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -35,12 +34,8 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const addPrices = (prices: Price[]) => {
         setPrices(prices)
     }
-    const getInitialPrice = () => {
-        return prices.find(p => p.id === 1)
-    }
-
     return (
-        <StoreContext.Provider value={{ products, addProducts, getProductById, prices, addPrices, getInitialPrice }}>
+        <StoreContext.Provider value={{ products, addProducts, getProductById, prices, addPrices }}>
             {children}
         </StoreContext.Provider>
     );

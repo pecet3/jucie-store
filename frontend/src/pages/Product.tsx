@@ -6,10 +6,10 @@ import { Price } from "../utils/types";
 
 export const Product = () => {
     const { id } = useParams();
-    const { getProductById, prices, getInitialPrice } = useStoreContext();
+    const { getProductById, prices } = useStoreContext();
     const product = getProductById(Number(id));
     const [strength, setStrength] = useState("");
-    const [price, setPrice] = useState("")
+    const [price, setPrice] = useState(prices[0].price.toString())
     const handleButtonClick = () => {
         // if (!strength && capacity) {
         //     return
@@ -24,11 +24,6 @@ export const Product = () => {
     const handleChangeSelectCapacity = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setPrice(e.target?.value)
     }
-
-    useEffect(() => {
-        if (prices)
-            setPrice(getInitialPrice()?.price.toString() as string)
-    }, [prices])
     return (
         <div className="flex-grow flex items-center justify-center py-16 relative">
             <div className="w-full max-w-4xl px-4 relative">

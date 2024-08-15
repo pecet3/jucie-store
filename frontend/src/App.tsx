@@ -6,12 +6,12 @@ import { Navbar } from './components/Navbar'
 import { How } from './pages/How'
 import { Products } from './pages/Products'
 import { useStoreContext } from './utils/storeContext'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Product } from './pages/Product'
 
 function App() {
   const { addProducts, addPrices } = useStoreContext()
-
+  const [isLoading, setIsLoading] = useState(true)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,7 +25,7 @@ function App() {
         const pricesData = await pricesResponse.json();
         addPrices(pricesData);
         console.log(pricesData)
-
+        setIsLoading(false)
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -36,12 +36,16 @@ function App() {
   return (
     <>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/how" element={<How />} />
-        <Route path='/juices' element={<Products />} />
-        <Route path="/juices/:id" element={<Product />} />
-      </Routes>
+      {isLoading
+        ? <p>Loading</p>
+        :
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/how" element={<How />} />
+          <Route path='/juices' element={<Products />} />
+          <Route path="/juices/:id" element={<Product />} />
+        </Routes>
+      }
     </>
   )
 }
