@@ -2,12 +2,12 @@ import { useStoreContext } from "../utils/storeContext";
 import { useParams } from "react-router-dom";
 import { FaShoppingBasket } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { BasketItem, Price } from "../utils/types";
+import { BasketItem } from "../utils/types";
 import toast from "react-hot-toast";
 
 export const Product = () => {
     const { id } = useParams();
-    const { getProductById, prices, addItemToBasket, basket } = useStoreContext();
+    const { isLoading, getProductById, prices, addItemToBasket, basket } = useStoreContext();
 
     const product = getProductById(Number(id));
 

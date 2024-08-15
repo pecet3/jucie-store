@@ -3,6 +3,8 @@ import { BasketItem, Price, Product } from './types';
 
 
 type StoreContextType = {
+    isLoading: boolean
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
     products: Product[]
     addProducts: (products: Product[]) => void
     getProductById: (id: number) => Product | undefined
@@ -18,6 +20,7 @@ type StoreContextType = {
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [isLoading, setIsLoading] = useState(true)
     const [products, setProducts] = useState<Product[]>([{
         id: 0,
         name: "",
@@ -89,7 +92,13 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         return p
     })().toFixed(2))
     return (
-        <StoreContext.Provider value={{ products, addProducts, getProductById, prices, addPrices, basket, addItemToBasket, itemsCount, finalPrice, changeItemQuantity }}>
+        <StoreContext.Provider value={
+            {
+                isLoading, setIsLoading,
+                products, addProducts, getProductById,
+                prices, addPrices,
+                basket, addItemToBasket, itemsCount, finalPrice, changeItemQuantity
+            }}>
             {children}
         </StoreContext.Provider>
     );

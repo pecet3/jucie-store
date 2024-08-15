@@ -9,7 +9,7 @@ export const NavBasket = () => {
             <div className="overflow-y-scroll">
                 {basket.map(i => (
                     <div key={i.product.id + i.price + i.strength}
-                        className="flex items-center gap-1"
+                        className="flex items-center justify-between gap-1 pr-1"
                     >
                         <img src={i.product.image_url} className="w-16 h-16" />
                         <p>{i.product.name}</p>
@@ -23,7 +23,7 @@ export const NavBasket = () => {
                     </div>
                 ))}
             </div>
-            {finalPrice}
+            Total: {finalPrice} PLN
             <Link to="/basket" >
                 Order
             </Link>

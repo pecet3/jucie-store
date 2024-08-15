@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <Toaster position="bottom-center" toastOptions={{
         duration: 3000,
         style: {
-          backgroundColor: "purple",
+          backgroundColor: "#3b0764",
           color: "white"
         }
       }} />
