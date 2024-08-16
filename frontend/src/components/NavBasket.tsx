@@ -5,11 +5,11 @@ export const NavBasket = () => {
     const { basket, finalPrice, changeItemQuantity } = useStoreContext()
     return (
         <div className="absolute top-16 right-4 flex flex-col rounded-lg backdrop-blur-md
-         bg-white bg-opacity-10 p-2 z-50 max-h-96">
+         bg-white bg-opacity-10 p-2 z-50 max-h-96 w-80">
             <div className="overflow-y-scroll">
                 {basket.map(i => (
                     <div key={i.product.id + i.price + i.strength}
-                        className="flex items-center justify-between gap-1 pr-1"
+                        className="flex items-center justify-between gap-1 pr-1 break-words"
                     >
                         <img src={i.product.image_url} className="w-16 h-16" />
                         <p>{i.product.name}</p>

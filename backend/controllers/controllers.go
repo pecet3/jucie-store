@@ -26,6 +26,9 @@ func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices, ss *auth.Se
 	mux.Handle("/products/{id}", ss.AuthorizeAdmin(c.productController))
 	mux.Handle("/prices/{id}", ss.AuthorizeAdmin(c.pricesController))
 
+	mux.Handle("/categories/{id}", ss.AuthorizeAdmin(c.categoryController))
+	mux.Handle("/categories", ss.AuthorizeAdmin(c.categoriesController))
+
 	// mux.HandleFunc("/panel", c.panelController)
 	// mux.HandleFunc("/products/{id}", c.productsAdminController)
 	// mux.HandleFunc("/prices/{id}", c.pricesController)

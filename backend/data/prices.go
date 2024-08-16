@@ -19,7 +19,7 @@ type Price struct {
 	Price    float64 `json:"price"`
 }
 
-func (pr Price) AddPrice(db *sql.DB, p Price) (int64, error) {
+func (pr Price) Add(db *sql.DB, p Price) (int64, error) {
 	stmt, err := db.Prepare("INSERT INTO prices(capacity, price) VALUES(?, ?)")
 	if err != nil {
 		return 0, err
@@ -34,7 +34,7 @@ func (pr Price) AddPrice(db *sql.DB, p Price) (int64, error) {
 	return result.LastInsertId()
 }
 
-func (pr Price) DeletePrice(db *sql.DB, id int) error {
+func (pr Price) Delete(db *sql.DB, id int) error {
 	stmt, err := db.Prepare("DELETE FROM prices WHERE id = ?")
 	if err != nil {
 		return err
@@ -45,7 +45,7 @@ func (pr Price) DeletePrice(db *sql.DB, id int) error {
 	return err
 }
 
-func (pr Price) UpdatePrice(db *sql.DB, p *Price) error {
+func (pr Price) Update(db *sql.DB, p *Price) error {
 	query := "UPDATE prices SET price = ? WHERE capacity = ?"
 	_, err := db.Exec(query, p.Price, p.Capacity)
 	if err != nil {

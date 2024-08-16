@@ -33,8 +33,40 @@ func (c controllers) loginAdminController(w http.ResponseWriter, r *http.Request
 		return
 	}
 }
-func (c controllers) productsController(w http.ResponseWriter, r *http.Request) {
 
+func (c controllers) categoriesController(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		name := r.FormValue("name")
+		if name == "" {
+			http.Error(w, "", http.StatusBadRequest)
+			return
+		}
+		err := c.data.Category.Add(c.data.Db, name)
+		if err != nil {
+			http.Error(w, "", http.StatusBadRequest)
+			return
+		}
+		return
+	}
+}
+func (c controllers) categoryController(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "DELETE" {
+		id := r.PathValue("id")
+		if id == "" {
+			http.Error(w, "", http.StatusBadRequest)
+			return
+		}
+		idInt, err := strconv.Atoi((id))
+		err = c.data.Category.Delete(c.data.Db, idInt)
+		if err != nil {
+			http.Error(w, "Error retrieving file", http.StatusBadRequest)
+			return
+		}
+		return
+	}
+}
+
+func (c controllers) productsController(w http.ResponseWriter, r *http.Request) {
 	log.Println("POST PRODUCT")
 	name := r.FormValue("name")
 	description := r.FormValue("description")
@@ -172,7 +204,7 @@ func (c controllers) pricesController(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		p.Price = priceFloat
-		err = c.data.Price.UpdatePrice(c.data.Db, p)
+		err = c.data.Price.Update(c.data.Db, p)
 		if err != nil {
 			http.Error(w, "", http.StatusBadRequest)
 			return

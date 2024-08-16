@@ -19,9 +19,10 @@ func newDb() *sql.DB {
 		log.Fatalf("Failed to ping database: %v", err)
 	}
 
-	prepareList := [2]string{
+	prepareList := [3]string{
 		PricesTable,
 		ProductsTable,
+		CategoryTable,
 	}
 
 	for _, table := range prepareList {
@@ -52,15 +53,17 @@ func prepare(db *sql.DB, table string) error {
 }
 
 type Data struct {
-	Db      *sql.DB
-	Price   Price
-	Product Product
+	Db       *sql.DB
+	Price    Price
+	Product  Product
+	Category Category
 }
 
 func New() Data {
 	return Data{
-		Db:      newDb(),
-		Price:   Price{},
-		Product: Product{},
+		Db:       newDb(),
+		Price:    Price{},
+		Product:  Product{},
+		Category: Category{},
 	}
 }
