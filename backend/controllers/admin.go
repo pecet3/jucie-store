@@ -10,38 +10,33 @@ import (
 )
 
 func (c controllers) panelController(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		products, err := c.data.Product.GetAll(c.data.Db)
-		if err != nil {
-			http.Error(w, "products", http.StatusInternalServerError)
-			log.Println(err)
-			return
-		}
-		prices, err := c.data.Price.GetAll(c.data.Db)
-		if err != nil {
-			http.Error(w, "", http.StatusInternalServerError)
-			log.Println(err)
-			return
-		}
-		categories, err := c.data.Category.GetAll(c.data.Db)
-		if err != nil {
-			http.Error(w, "", http.StatusInternalServerError)
-			log.Println(err)
-			return
-		}
-		views.PanelPage(products, prices, categories, c.sessionStore.Password).Render(r.Context(), w)
+	products, err := c.data.Product.GetAll(c.data.Db)
+	if err != nil {
+		http.Error(w, "products", http.StatusInternalServerError)
+		log.Println(err)
+		return
 	}
+	prices, err := c.data.Price.GetAll(c.data.Db)
+	if err != nil {
+		http.Error(w, "", http.StatusInternalServerError)
+		log.Println(err)
+		return
+	}
+	categories, err := c.data.Category.GetAll(c.data.Db)
+	if err != nil {
+		http.Error(w, "", http.StatusInternalServerError)
+		log.Println(err)
+		return
+	}
+	views.PanelPage(products, prices, categories, c.sessionStore.Password).Render(r.Context(), w)
 
 }
 func (c controllers) loginAdminController(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		views.LoginPage().Render(r.Context(), w)
-		return
-	}
+	views.LoginPage().Render(r.Context(), w)
 }
 
 func (c controllers) categoriesController(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
+	if r.Method == http.MethodPost {
 		name := r.FormValue("name")
 		if name == "" {
 			http.Error(w, "", http.StatusBadRequest)
@@ -113,7 +108,7 @@ func (c controllers) productsController(w http.ResponseWriter, r *http.Request) 
 
 }
 func (c controllers) productController(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
+	if r.Method == http.MethodPost {
 		log.Println("POST PRODUCT")
 		name := r.FormValue("name")
 		description := r.FormValue("description")
@@ -142,7 +137,7 @@ func (c controllers) productController(w http.ResponseWriter, r *http.Request) {
 		log.Println("Added a product")
 		http.Redirect(w, r, "/panel", http.StatusSeeOther)
 	}
-	if r.Method == "PUT" {
+	if r.Method == http.MethodPut {
 		productId := r.PathValue("id")
 		if productId == "" {
 			http.Error(w, "not provided ID", http.StatusBadRequest)
@@ -193,7 +188,7 @@ func (c controllers) productController(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c controllers) pricesController(w http.ResponseWriter, r *http.Request) {
-	if r.PostFormValue("_method") == "PUT" {
+	if r.PostFormValue("_method") == http.MethodPut {
 		priceId := r.PathValue("id")
 		if priceId == "" {
 			http.Error(w, "not provided ID", http.StatusBadRequest)

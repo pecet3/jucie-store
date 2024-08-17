@@ -21,7 +21,7 @@ func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices, ss *auth.Se
 		sessionStore: ss,
 	}
 
-	mux.Handle("/panel", ss.AuthorizeAdmin(c.panelController))
+	mux.Handle("GET /panel", ss.AuthorizeAdmin(c.panelController))
 	mux.Handle("/products", ss.AuthorizeAdmin(c.productsController))
 	mux.Handle("/products/{id}", ss.AuthorizeAdmin(c.productController))
 	mux.Handle("/prices/{id}", ss.AuthorizeAdmin(c.pricesController))
@@ -33,7 +33,7 @@ func Run(mux *http.ServeMux, d data.Data, s storage.StorageServices, ss *auth.Se
 	// mux.HandleFunc("/products/{id}", c.productsAdminController)
 	// mux.HandleFunc("/prices/{id}", c.pricesController)
 
-	mux.HandleFunc("/login-admin", c.loginAdminController)
-	mux.HandleFunc("/login", c.userLoginController)
+	mux.HandleFunc("GET /login-admin", c.loginAdminController)
+	mux.HandleFunc("GET /login", c.userLoginController)
 	mux.Handle("/", ss.AuthorizeAuth(c.serveReact))
 }

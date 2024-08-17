@@ -72,11 +72,11 @@ func (as *SessionStore) AuthorizeAuth(next http.HandlerFunc) http.Handler {
 			http.Error(w, "", http.StatusUnauthorized)
 			return
 		}
-		if r.Method == "POST" {
+		if r.Method == http.MethodPost {
 			log.Println(s.PostSuspendExpiry.Before(time.Now()))
 			if !s.PostSuspendExpiry.IsZero() && !s.PostSuspendExpiry.Before(time.Now()) {
-				log.Println("<Auth> User trying to use method POST, but is suspended")
-				http.Error(w, "", http.StatusUnauthorized)
+				log.Println("<Auth> User trying to use method POST, but they is suspended")
+				http.Error(w, "suspended post method", http.StatusBadRequest)
 				return
 			}
 			s.PostSuspendExpiry = time.Now().Add(30 * time.Second)
