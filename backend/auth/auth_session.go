@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -51,10 +50,6 @@ func (as *SessionStore) RemoveAuthSession(token string) {
 
 func (as *SessionStore) AuthorizeAuth(next http.HandlerFunc) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println(r.Method)
-		if strings.TrimSpace(r.Method) == "POST" {
-			log.Println("post1")
-		}
 		cookie, err := r.Cookie("session_token")
 		if err != nil {
 			if err == http.ErrNoCookie {
@@ -77,12 +72,9 @@ func (as *SessionStore) AuthorizeAuth(next http.HandlerFunc) http.Handler {
 			http.Error(w, "", http.StatusUnauthorized)
 			return
 		}
-		if strings.TrimSpace(r.Method) == "POST" {
-			log.Println("post2")
-		}
 		if r.Method == "POST" {
-			log.Println(s.PostSuspendExpiry)
-			if s.PostSuspendExpiry.IsZero() && s.PostSuspendExpiry.Before(time.Now()) {
+			log.Println(s.PostSuspendExpiry.Before(time.Now()))
+			if !s.PostSuspendExpiry.IsZero() && !s.PostSuspendExpiry.Before(time.Now()) {
 				log.Println("<Auth> User trying to use method POST, but is suspended")
 				http.Error(w, "", http.StatusUnauthorized)
 				return
