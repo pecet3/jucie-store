@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 
 export const Product = () => {
     const { id } = useParams();
-    const { isLoading, getProductById, prices, addItemToBasket, basket } = useStoreContext();
+    const { getProductById, prices, addItemToBasket, basket } = useStoreContext();
 
     const product = getProductById(Number(id));
 

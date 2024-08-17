@@ -14,11 +14,12 @@ const (
 )
 
 type Session struct {
-	Expiry       time.Time
-	Token        string
-	ActivateCode string
-	UserIp       string
-	Type         string
+	Expiry            time.Time
+	Token             string
+	ActivateCode      string
+	UserIp            string
+	Type              string
+	PostSuspendExpiry time.Time
 }
 
 type SessionStore struct {

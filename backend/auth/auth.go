@@ -46,10 +46,10 @@ func (a auth) handleLogin(w http.ResponseWriter, r *http.Request) {
 			SameSite: http.SameSiteStrictMode,
 			Path:     "/",
 		})
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		w.WriteHeader(http.StatusOK)
 		return
 	}
-	w.WriteHeader(http.StatusUnauthorized)
+	w.WriteHeader(http.StatusBadRequest)
 }
 
 func (a auth) handleAdminLogin(w http.ResponseWriter, r *http.Request) {

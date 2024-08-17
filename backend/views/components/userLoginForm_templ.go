@@ -26,7 +26,7 @@ func UserLoginForm() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form method=\"POST\" action=\"/auth/login\"><input name=\"password\" type=\"text\" class=\"p-1\"> <input type=\"submit\" class=\"\" value=\"submit\"></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"form-login\"><input name=\"password\" type=\"text\" class=\"p-1\"> <input type=\"submit\" class=\"\" value=\"submit\"></form><script>\n\tconst loginForm = document.getElementById(\"form-login\")\n\t\tloginForm.addEventListener((e)=>{\n\t\t\te.preventDefault()\n\t\t\tconst formData = new FormData(loginForm);\n\n            fetch('/auth/login`', {\n                method: 'POST',\n\t\t\t\tbody: formData\n            }).then(response=>{\n\t\t\t\tif (response.ok){\n\t\t\t\t\twindow.location.reload();\n\t\t\t\t}\n\t\t\t})\n\t\t})\n\t</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

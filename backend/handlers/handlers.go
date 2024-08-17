@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/pecet3/my-api/auth"
 	"github.com/pecet3/my-api/data"
 )
@@ -12,17 +13,19 @@ import (
 type handlers struct {
 	data data.Data
 	ss   *auth.SessionStore
+	v    *validator.Validate
 }
 
-func Run(mux *http.ServeMux, d data.Data, ss *auth.SessionStore) {
+func Run(mux *http.ServeMux, v *validator.Validate, d data.Data, ss *auth.SessionStore) {
 	h := handlers{
 		data: d,
 		ss:   ss,
+		v:    v,
 	}
 
-	mux.HandleFunc("GET /api/products", h.handleProducts)
-	mux.HandleFunc("GET /api/prices", h.handlePrices)
-	mux.HandleFunc("POST /api/orders", h.handleOrders)
+	mux.Handle("GET /api/products", ss.AuthorizeAuth(h.handleProducts))
+	mux.Handle("GET /api/prices", ss.AuthorizeAuth(h.handlePrices))
+	mux.Handle("POST /api/orders", ss.AuthorizeAuth(h.handleOrders))
 }
 
 func (h handlers) handleProducts(w http.ResponseWriter, r *http.Request) {
@@ -67,6 +70,19 @@ func (h handlers) handleOrders(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "", http.StatusBadRequest)
 		return
 	}
+	err = h.v.Struct(order)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
 	log.Println(order)
+	id, err := h.data.Order.Add(h.data.Db, &order)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "", http.StatusInternalServerError)
+		return
+	}
+	log.Println(id)
 	w.WriteHeader(http.StatusOK)
 }

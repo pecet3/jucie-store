@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { useStoreContext } from "../utils/storeContext"
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 interface FormData {
     fullName: string;
@@ -12,7 +13,8 @@ interface FormData {
 }
 
 export const Basket: React.FC = () => {
-    const { basket, finalPrice, itemsCount, changeItemQuantity } = useStoreContext()
+    const { basket, clearBasket, finalPrice, itemsCount, changeItemQuantity } = useStoreContext()
+    const [isOrderDone, setIsOrderDone] = useState<boolean>(false)
     const [formData, setFormData] = useState<FormData>({
         fullName: '',
         email: '',
@@ -37,7 +39,6 @@ export const Basket: React.FC = () => {
             let counter = 0
             for (let i of basket) {
                 counter++
-
                 products = products + ` x${i.quantity} ${i.product.name} ${i.strength}MG ${i.capacity}ML ${counter < basket.length ? "||" : ""} `
             }
             return products
@@ -53,32 +54,31 @@ export const Basket: React.FC = () => {
             final_price: finalPrice,
             items_count: itemsCount
         }
-
-        console.log(request)
-        try {
-            const response = await fetch('/api/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(
-                    request
-                ),
-            })
-            if (response.ok) {
-                // Handle successful order
-                console.log('Order placed successfully')
-            } else {
-                // Handle errors
-                console.error('Failed to place order')
-            }
-        } catch (error) {
-            console.error('Error:', error)
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+                request
+            ),
+        })
+        if (response.ok) {
+            toast.success('Order placed successfully')
+            setIsOrderDone(true)
+            setTimeout(() => {
+                clearBasket()
+            }, 4000)
+        } else {
+            toast.error("Ups... Something went wrong")
         }
+
     }
     if (basket.length <= 0) return (
         <div className="mt-60">
-            <p className="text-4xl my-16">Basket is Empty</p>
+            {isOrderDone
+                ? <p className="text-4xl my-16">Thank you for the order</p>
+                : <p className="text-4xl my-16">Basket is Empty</p>}
             <Link to="/juices" className="bg-purple-950 rounded-3xl py-3 px-8 font-medium inline-block 
                     mr-4 hover:bg-transparent hover:border-purple-950 hover:text-white duration-300 hover:border border-2 border-white step-title">
                 BACK TO SHOPING

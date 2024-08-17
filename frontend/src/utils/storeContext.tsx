@@ -12,6 +12,7 @@ type StoreContextType = {
     addPrices: (prices: Price[]) => void
     basket: BasketItem[]
     addItemToBasket: (newItem: BasketItem) => void
+    clearBasket: () => void
     changeItemQuantity: (item: BasketItem, quantity: number) => void
     itemsCount: number
     finalPrice: number
@@ -50,7 +51,9 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     useEffect(() => {
         localStorage.setItem('basket', JSON.stringify(basket))
     }, [basket])
-
+    const clearBasket = () => {
+        setBasket([])
+    }
     const addItemToBasket = (newItem: BasketItem) => {
         const existingItem = basket.find(item =>
             item.product.id === newItem.product.id
@@ -104,7 +107,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 isLoading, setIsLoading,
                 products, addProducts, getProductById,
                 prices, addPrices,
-                basket, addItemToBasket, itemsCount, finalPrice, changeItemQuantity
+                basket, addItemToBasket, clearBasket, itemsCount, finalPrice, changeItemQuantity
             }}>
             {children}
         </StoreContext.Provider>

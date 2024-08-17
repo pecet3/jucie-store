@@ -12,7 +12,10 @@ import (
 func (c controllers) userLoginController(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		views.UserLoginPage().Render(r.Context(), w)
+		return
 	}
+	log.Println(r.Method)
+	w.WriteHeader(http.StatusBadRequest)
 }
 
 func (c controllers) serveReact(w http.ResponseWriter, r *http.Request) {

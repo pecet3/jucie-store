@@ -1,8 +1,24 @@
 package components
 
 templ UserLoginForm() {
-	<form method="POST" action="/auth/login">
+	<form id="form-login">
 		<input name="password" type="text" class="p-1"/>
 		<input type="submit" class="" value="submit"/>
 	</form>
+	<script>
+	const loginForm = document.getElementById("form-login")
+		loginForm.addEventListener((e)=>{
+			e.preventDefault()
+			const formData = new FormData(loginForm);
+
+            fetch('/auth/login`', {
+                method: 'POST',
+				body: formData
+            }).then(response=>{
+				if (response.ok){
+					window.location.reload();
+				}
+			})
+		})
+	</script>
 }

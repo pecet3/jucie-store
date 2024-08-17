@@ -35,7 +35,7 @@ func main() {
 	storage.Run(mux, app.data.Db, app.sessions)
 	auth.Run(mux, app.sessions, app.data)
 	controllers.Run(mux, app.data, app.storage, app.sessions)
-	handlers.Run(mux, app.data, app.sessions)
+	handlers.Run(mux, app.validator, app.data, app.sessions)
 	address := "127.0.0.1:8090"
 	server := &http.Server{
 		Addr:    address,
