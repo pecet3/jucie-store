@@ -23,7 +23,13 @@ func (c controllers) panelController(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 			return
 		}
-		views.PanelPage(products, prices, c.sessionStore.Password).Render(r.Context(), w)
+		categories, err := c.data.Category.GetAll(c.data.Db)
+		if err != nil {
+			http.Error(w, "", http.StatusInternalServerError)
+			log.Println(err)
+			return
+		}
+		views.PanelPage(products, prices, categories, c.sessionStore.Password).Render(r.Context(), w)
 	}
 
 }
@@ -46,10 +52,14 @@ func (c controllers) categoriesController(w http.ResponseWriter, r *http.Request
 			http.Error(w, "", http.StatusBadRequest)
 			return
 		}
+		http.Redirect(w, r, "/panel", http.StatusSeeOther)
+
 		return
 	}
 }
+
 func (c controllers) categoryController(w http.ResponseWriter, r *http.Request) {
+	log.Println(1)
 	if r.Method == "DELETE" {
 		id := r.PathValue("id")
 		if id == "" {
@@ -57,11 +67,17 @@ func (c controllers) categoryController(w http.ResponseWriter, r *http.Request) 
 			return
 		}
 		idInt, err := strconv.Atoi((id))
+		if err != nil {
+			http.Error(w, "Error retrieving file", http.StatusBadRequest)
+			return
+		}
 		err = c.data.Category.Delete(c.data.Db, idInt)
 		if err != nil {
 			http.Error(w, "Error retrieving file", http.StatusBadRequest)
 			return
 		}
+		http.Redirect(w, r, "/panel", http.StatusSeeOther)
+
 		return
 	}
 }

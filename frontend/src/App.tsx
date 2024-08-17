@@ -8,6 +8,7 @@ import { Products } from './pages/Products'
 import { useStoreContext } from './utils/storeContext'
 import { useEffect } from 'react'
 import { Product } from './pages/Product'
+import { Basket } from './pages/Basket'
 
 function App() {
   const { addProducts, addPrices, setIsLoading } = useStoreContext()
@@ -40,6 +41,7 @@ function App() {
         <Route path="/how" element={<How />} />
         <Route path='/juices' element={<Products />} />
         <Route path="/juices/:id" element={<Product />} />
+        <Route path='/basket' element={<Basket />} />
       </Routes>
     </>
   )
