@@ -22,6 +22,7 @@ func Run(mux *http.ServeMux, d data.Data, ss *auth.SessionStore) {
 
 	mux.HandleFunc("GET /api/products", h.handleProducts)
 	mux.HandleFunc("GET /api/prices", h.handlePrices)
+	mux.HandleFunc("POST /api/orders", h.handleOrders)
 }
 
 func (h handlers) handleProducts(w http.ResponseWriter, r *http.Request) {
@@ -56,4 +57,16 @@ func (h handlers) handlePrices(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
+}
+
+func (h handlers) handleOrders(w http.ResponseWriter, r *http.Request) {
+	var order data.Order
+	err := json.NewDecoder(r.Body).Decode(&order)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+	log.Println(order)
+	w.WriteHeader(http.StatusOK)
 }

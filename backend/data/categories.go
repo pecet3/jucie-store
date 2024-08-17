@@ -4,7 +4,8 @@ import (
 	"database/sql"
 )
 
-const CategoryTable = `create table if not exists categories(
+const CategoriesTable = `
+	create table if not exists categories(
 		id integer primary key autoincrement,
 		name text
 )`

@@ -56,14 +56,14 @@ export const Basket: React.FC = () => {
 
         console.log(request)
         try {
-            const response = await fetch('/orders', {
+            const response = await fetch('/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
+                body: JSON.stringify(
                     request
-                }),
+                ),
             })
             if (response.ok) {
                 // Handle successful order
