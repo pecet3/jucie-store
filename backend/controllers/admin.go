@@ -28,7 +28,13 @@ func (c controllers) panelController(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	views.PanelPage(products, prices, categories, c.sessionStore.Password).Render(r.Context(), w)
+	orders, err := c.data.Order.GetAll(c.data.Db)
+	if err != nil {
+		http.Error(w, "", http.StatusInternalServerError)
+		log.Println(err)
+		return
+	}
+	views.PanelPage(products, prices, categories, c.sessionStore.Password, orders).Render(r.Context(), w)
 
 }
 func (c controllers) loginAdminController(w http.ResponseWriter, r *http.Request) {
@@ -178,6 +184,25 @@ func (c controllers) productController(w http.ResponseWriter, r *http.Request) {
 			p.ImageURL = path
 		}
 		err = c.data.Product.Update(c.data.Db, p)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, "Failed to update a product", http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+	}
+	if r.Method == http.MethodDelete {
+		productId := r.PathValue("id")
+		if productId == "" {
+			http.Error(w, "not provided ID", http.StatusBadRequest)
+			return
+		}
+		pId, err := strconv.ParseInt(productId, 10, 64)
+		if err != nil {
+			http.Error(w, "not provided ID", http.StatusBadRequest)
+			return
+		}
+		err = c.data.Product.RemoveById(c.data.Db, int(pId))
 		if err != nil {
 			log.Println(err)
 			http.Error(w, "Failed to update a product", http.StatusInternalServerError)

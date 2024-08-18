@@ -41,6 +41,11 @@ templ ProductsDisplay(products []data.Product) {
 							<button type="submit">Update</button>
 						</td>
 					</form>
+					<td class="border border-black">
+						<button id={ "deleteBtn-" + strconv.Itoa(p.Id) }>
+							X
+						</button>
+					</td>
 				</tr>
 				@templ.Raw(generateScript(p.Id))
 			}
@@ -51,10 +56,10 @@ templ ProductsDisplay(products []data.Product) {
 func generateScript(id int) string {
 	return `
     <script>
-        const form = document.getElementById('form-` + strconv.Itoa(id) + `');
-        form.addEventListener('submit', function(event) {
+        const form` + strconv.Itoa(id) + ` = document.getElementById('form-` + strconv.Itoa(id) + `');
+        form` + strconv.Itoa(id) + `.addEventListener('submit', function(event) {
             event.preventDefault();
-            const formData = new FormData(form);
+            const formData = new FormData(form` + strconv.Itoa(id) + `);
 
             fetch('/products/` + strconv.Itoa(id) + `', {
                 method: 'PUT',
@@ -65,7 +70,16 @@ func generateScript(id int) string {
 				}
 			})
         });
-
+		 const deleteBtn` + strconv.Itoa(id) + ` = document.getElementById('deleteBtn-` + strconv.Itoa(id) + `');
+		 deleteBtn` + strconv.Itoa(id) + `.addEventListener('click', function(event) {
+            fetch('/products/` + strconv.Itoa(id) + `', {
+                method: 'DELETE',
+            }).then(response=>{
+				if (response.ok){
+					window.location.reload();
+				}
+			})
+        });
     </script>
     `
 }

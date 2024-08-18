@@ -67,25 +67,23 @@ func (as *SessionStore) AuthorizeAuth(next http.HandlerFunc) http.Handler {
 			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 			return
 		}
-		if r.Method == http.MethodPost {
-			log.Println(s.PostSuspendExpiry.Before(time.Now()))
-			if !s.PostSuspendExpiry.IsZero() && !s.PostSuspendExpiry.Before(time.Now()) {
-				log.Println("<Auth> User trying to use method POST, but they is suspended")
-				http.Error(w, "suspended post method", http.StatusBadRequest)
-				return
-			}
-			s.PostSuspendExpiry = time.Now().Add(30 * time.Second)
-		}
 		if s.Type != typeAuth {
 			log.Println("<Auth> Trying to log in AdminSession as AuthSession")
 			http.Error(w, "", http.StatusUnauthorized)
 			return
 		}
 		if s.Expiry.Before(time.Now()) {
-			log.Println("delete")
 			delete(as.AuthSessions, sessionToken)
-			http.Error(w, "", http.StatusUnauthorized)
+			http.Error(w, "Your sessions is expired, you need to provide a new password", http.StatusUnauthorized)
 			return
+		}
+		if r.Method == http.MethodPost {
+			if !s.PostSuspendExpiry.IsZero() && !s.PostSuspendExpiry.Before(time.Now()) {
+				log.Println("<Auth> User trying to use method POST, but they is suspended")
+				http.Error(w, "suspended post method", http.StatusBadRequest)
+				return
+			}
+			s.PostSuspendExpiry = time.Now().Add(30 * time.Second)
 		}
 		ctx := context.WithValue(r.Context(), &Session{}, s)
 		next.ServeHTTP(w, r.WithContext(ctx))

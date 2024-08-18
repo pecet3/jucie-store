@@ -114,7 +114,20 @@ func ProductsDisplay(products []data.Product) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</textarea></td><td class=\"border border-black\"><button type=\"submit\">Update</button></td></form></tr>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</textarea></td><td class=\"border border-black\"><button type=\"submit\">Update</button></td></form><td class=\"border border-black\"><button id=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var8 string
+			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs("deleteBtn-" + strconv.Itoa(p.Id))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/productsDisplay.templ`, Line: 45, Col: 52}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">X</button></td></tr>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -134,10 +147,10 @@ func ProductsDisplay(products []data.Product) templ.Component {
 func generateScript(id int) string {
 	return `
     <script>
-        const form = document.getElementById('form-` + strconv.Itoa(id) + `');
-        form.addEventListener('submit', function(event) {
+        const form` + strconv.Itoa(id) + ` = document.getElementById('form-` + strconv.Itoa(id) + `');
+        form` + strconv.Itoa(id) + `.addEventListener('submit', function(event) {
             event.preventDefault();
-            const formData = new FormData(form);
+            const formData = new FormData(form` + strconv.Itoa(id) + `);
 
             fetch('/products/` + strconv.Itoa(id) + `', {
                 method: 'PUT',
@@ -148,7 +161,16 @@ func generateScript(id int) string {
 				}
 			})
         });
-
+		 const deleteBtn` + strconv.Itoa(id) + ` = document.getElementById('deleteBtn-` + strconv.Itoa(id) + `');
+		 deleteBtn` + strconv.Itoa(id) + `.addEventListener('click', function(event) {
+            fetch('/products/` + strconv.Itoa(id) + `', {
+                method: 'DELETE',
+            }).then(response=>{
+				if (response.ok){
+					window.location.reload();
+				}
+			})
+        });
     </script>
     `
 }

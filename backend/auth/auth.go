@@ -15,7 +15,11 @@ type auth struct {
 	data data.Data
 }
 
-type LoginDto struct {
+type authLoginDto struct {
+	Password string `json:"password"`
+}
+type adminLoginDto struct {
+	Name     string `json:"username"`
 	Password string `json:"password"`
 }
 
@@ -32,7 +36,7 @@ func Run(srv *http.ServeMux, ss *SessionStore, data data.Data) {
 	go cleanUpExpiredSessionsLoop(ss)
 }
 func (a auth) handleLogin(w http.ResponseWriter, r *http.Request) {
-	var dto LoginDto
+	var dto authLoginDto
 	err := json.NewDecoder(r.Body).Decode(&dto)
 	if err != nil {
 		log.Println("<Auth>", err)
@@ -62,11 +66,15 @@ func (a auth) handleLogin(w http.ResponseWriter, r *http.Request) {
 func (a auth) handleAdminLogin(w http.ResponseWriter, r *http.Request) {
 	name := os.Getenv("USER_NAME")
 	password := os.Getenv("USER_PASSWORD")
+	var dto adminLoginDto
+	err := json.NewDecoder(r.Body).Decode(&dto)
+	if err != nil {
+		log.Println("<Auth>", err)
+		http.Error(w, "Bad request", http.StatusBadRequest)
+		return
+	}
 
-	formUser := r.FormValue("username")
-	formPassword := r.FormValue("password")
-
-	if name == formUser && password == formPassword {
+	if name == dto.Name && password == dto.Password {
 		us, token := a.ss.NewAdminSession(r)
 		a.ss.AddAdminSession(token, us)
 		http.SetCookie(w, &http.Cookie{
@@ -76,7 +84,7 @@ func (a auth) handleAdminLogin(w http.ResponseWriter, r *http.Request) {
 			SameSite: http.SameSiteStrictMode,
 			Path:     "/",
 		})
-		http.Redirect(w, r, "/panel", http.StatusSeeOther)
+		w.WriteHeader(http.StatusOK)
 		return
 	}
 	http.Error(w, "wrong credentials", http.StatusUnauthorized)
