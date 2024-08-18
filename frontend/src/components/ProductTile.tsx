@@ -1,5 +1,5 @@
 import { FaShoppingBasket } from "react-icons/fa"
-import { Product } from "../utils/types"
+import { Product } from "../types"
 import { Link } from "react-router-dom"
 import { AiOutlineLoading3Quarters } from "react-icons/ai"
 

@@ -2,7 +2,7 @@ import { useRef, useEffect, MouseEvent } from "react";
 import pjlogo from "../assets/pjlogo.png";
 import { Link } from "react-router-dom";
 import { FaShoppingBasket } from "react-icons/fa";
-import { useStoreContext } from "../utils/storeContext";
+import { useStoreContext } from "../storeContext";
 import { useState } from "react";
 import { NavBasket } from "./NavBasket";
 

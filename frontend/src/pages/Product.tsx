@@ -1,8 +1,8 @@
-import { useStoreContext } from "../utils/storeContext";
+import { useStoreContext } from "../storeContext";
 import { useParams } from "react-router-dom";
 import { FaShoppingBasket } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { BasketItem } from "../utils/types";
+import { BasketItem } from "../types";
 import toast from "react-hot-toast";
 
 export const Product = () => {

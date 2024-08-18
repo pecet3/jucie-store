@@ -67,11 +67,6 @@ func (as *SessionStore) AuthorizeAuth(next http.HandlerFunc) http.Handler {
 			http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
 			return
 		}
-		if s == nil {
-			log.Println("<Auth> Session is nil")
-			http.Error(w, "", http.StatusUnauthorized)
-			return
-		}
 		if r.Method == http.MethodPost {
 			log.Println(s.PostSuspendExpiry.Before(time.Now()))
 			if !s.PostSuspendExpiry.IsZero() && !s.PostSuspendExpiry.Before(time.Now()) {

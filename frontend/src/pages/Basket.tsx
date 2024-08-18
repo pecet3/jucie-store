@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { useStoreContext } from "../utils/storeContext"
+import { useStoreContext } from "../storeContext"
 import { useState } from "react";
 import toast from "react-hot-toast";
 

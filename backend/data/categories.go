@@ -5,9 +5,9 @@ import (
 )
 
 const CategoriesTable = `
-	create table if not exists categories(
-		id integer primary key autoincrement,
-		name text
+create table if not exists categories(
+	id integer primary key autoincrement,
+	name text
 )`
 
 type Category struct {

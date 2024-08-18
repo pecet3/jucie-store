@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { HashRouter } from 'react-router-dom'
-import { StoreProvider } from './utils/storeContext.tsx'
+import { StoreProvider } from './storeContext.tsx'
 import { Toaster } from 'react-hot-toast'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
