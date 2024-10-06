@@ -10,7 +10,7 @@ export const Products = () => {
         ULTIMATE
       </h2>
       <div className="h-auto max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-12 p-6 rounded-lg bg-black bg-opacity-50 border-4 border-black">
-        {!isLoading
+        {!isLoading && products
           ? products.map((prod) => (
               <div
                 key={prod.id}

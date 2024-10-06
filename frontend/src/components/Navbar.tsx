@@ -50,7 +50,7 @@ export const Navbar = () => {
         <div className="blur-background" onClick={handleMenuClose} />
       )}
 
-      <nav className="relative flex justify-between items-center p-4 bg-black bg-opacity-50 border-4 border-black w-full mx-2 px-2 m-auto rounded-lg shadow-2xl">
+      <nav className="fixed relative flex justify-between items-center p-4 bg-black bg-opacity-50 border-4 border-black w-full mx-2 px-2 m-auto rounded-lg shadow-2xl">
         <Link to="/">
           <img src={pjlogo} className="w-40 cursor-pointer" alt="PJ Logo" />
         </Link>
