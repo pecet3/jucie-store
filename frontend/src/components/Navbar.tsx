@@ -162,6 +162,7 @@ export const Navbar = () => {
           </div>
         )}
       </nav>
+      <div className="opacity-0 flex justify-between h-24 items-center p-4 bg-black bg-opacity-50 border-4 border-black w-full mx-2 px-2 m-auto rounded-lg shadow-2xl"></div>
     </>
   );
 };
