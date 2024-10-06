@@ -1,32 +1,38 @@
 import { MainWrapper } from "../components/MainWrapper";
-import walter from "../assets/grocery-image.png"
 import { Link } from "react-router-dom";
 
 export const Home = () => {
-    return (
+  return (
+    <MainWrapper>
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="mt-0 md:mt-10 mb-44 text-center"> {/* Dodano text-center tutaj */}
+          {/* Nagłówek - responsywna wielkość czcionki */}
+          <div className="text-5xl sm:text-6xl md:text-8xl font-bold leading-tight text-white step-title">
+            PROJEKT JUICE
+          </div>
 
-        <MainWrapper>
-            <div className="mt-48 max-w-xl">
+          {/* Podtytuł - responsywna wielkość czcionki */}
+          <span className="font-semibold text-purple-950 text-4xl sm:text-5xl md:text-6xl block gradient-text pacifico-regular mt-2">
+            Level Up Your Vaping
+          </span>
 
-                <h1 className="text-6xl font-semibold mb-4 leading-normal text-white">
-                    PROJEKT JUICE
-                    <br />
-                    <span className="font-light text-purple-950">Level Up Your Vaping</span>
-                </h1>
-                <p className="text-lg text-white">At Projekt Juice, we specialize in crafting premium vape oils using top-quality flavors from the most renowned brands.</p>
-                <div className="mt-10 text-white">
-                    <Link to="/juices" className="bg-purple-950 rounded-3xl py-3 px-8 font-medium 
-                    inline-block mr-4 hover:bg-transparent hover:border-purple-950
-                     hover:text-white duration-300 hover:border border border-transparent">
-                        Order Now
-                    </Link>
-                </div>
-                <div className="mt-10">
-                    <img src={walter} className="w-1/2 mx-auto xl:w-1/3 xl:absolute bottom-0 right-60" />
-                </div>
-            </div>
-        </MainWrapper>
+          {/* Akapit - responsywna wielkość czcionki */}
+          <p className="text-lg sm:text-xl md:text-2xl text-white font-semibold mt-2 pacifico-regular max-w-xs sm:max-w-md md:max-w-lg mx-auto">
+            At Projekt Juice, we specialize in crafting premium vape oils using top-quality flavors from the most renowned brands.
+          </p>
 
-    );
+          {/* Link do produktów - responsywny padding i margines */}
+          <div className="mt-4 text-white">
+            <Link
+              to="/ProductsTypes"
+              className="rounded-3xl py-2 md:py-3 px-4 sm:px-6 md:px-8 font-medium inline-block 
+                hover:bg-transparent hover:border-white hover:text-white duration-300 hover:border-4 border-4 border-purple-950 step-title"
+            >
+              Order Now
+            </Link>
+          </div>
+        </div>
+      </div>
+    </MainWrapper>
+  );
 };
-

@@ -23,11 +23,10 @@ func Run(mux *http.ServeMux, v *validator.Validate, d data.Data, ss *auth.Sessio
 		v:    v,
 	}
 
-	mux.Handle("GET /api/products", ss.AuthorizeAuth(h.handleProducts))
-	mux.Handle("GET /api/prices", ss.AuthorizeAuth(h.handlePrices))
-	mux.Handle("POST /api/orders", ss.AuthorizeAuth(h.handleOrders))
+	mux.HandleFunc("GET /api/products", h.handleProducts)
+	mux.HandleFunc("GET /api/prices", h.handlePrices)
+	mux.HandleFunc("POST /api/orders", h.handleOrders)
 }
-
 func (h handlers) handleProducts(w http.ResponseWriter, r *http.Request) {
 	products, err := h.data.Product.GetAll(h.data.Db)
 	if err != nil {

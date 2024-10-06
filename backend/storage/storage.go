@@ -21,7 +21,7 @@ func Run(srv *http.ServeMux, db *sql.DB, as *auth.SessionStore) {
 		methods: &Services{},
 	}
 	srv.Handle("POST /upload-image", as.AuthorizeAdmin(s.handleUpload))
-	srv.HandleFunc("/images/", s.serveFileHandler)
+	srv.HandleFunc("/uploads/{file}", s.serveFileHandler)
 }
 
 func (s storage) handleUpload(w http.ResponseWriter, r *http.Request) {
@@ -43,12 +43,19 @@ func (s storage) handleUpload(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s storage) serveFileHandler(w http.ResponseWriter, r *http.Request) {
-	filePath := r.URL.Path
-	if _, err := os.Stat("./static/" + filePath); os.IsNotExist(err) {
+	fileName := r.PathValue("file")
+
+	if fileName == "" {
+		http.Error(w, "Invalid image type", http.StatusBadRequest)
+		return
+	}
+	log.Println("Accessing to the resources:", fileName)
+
+	if _, err := os.Stat("./static/uploads/" + fileName); os.IsNotExist(err) {
 		http.Error(w, "File not found", http.StatusNotFound)
 		return
 	}
-	ext := filepath.Ext(filePath)
+	ext := filepath.Ext(fileName)
 	mimeTypes := map[string]string{
 		".jpg":  "image/jpeg",
 		".jpeg": "image/jpeg",
@@ -62,5 +69,6 @@ func (s storage) serveFileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", mime)
-	http.ServeFile(w, r, "./static/"+filePath)
+
+	http.ServeFile(w, r, "./static/uploads/"+fileName)
 }

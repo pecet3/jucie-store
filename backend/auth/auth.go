@@ -56,6 +56,8 @@ func (a auth) handleLogin(w http.ResponseWriter, r *http.Request) {
 			Expires:  us.Expiry,
 			SameSite: http.SameSiteStrictMode,
 			Path:     "/",
+			Secure:   true,
+			HttpOnly: true,
 		})
 		w.WriteHeader(http.StatusOK)
 		return

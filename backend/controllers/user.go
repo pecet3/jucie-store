@@ -23,6 +23,6 @@ func (c controllers) serveReact(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Printf("<Controllers> User with IP:%s entered the protected react app", utils.GetIP(r))
-
+	log.Println(fs)
 	fs.ServeHTTP(w, r)
 }

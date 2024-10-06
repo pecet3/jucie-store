@@ -53,10 +53,10 @@ func (as *SessionStore) AuthorizeAuth(next http.HandlerFunc) http.Handler {
 		cookie, err := r.Cookie("session_token")
 		if err != nil {
 			if err == http.ErrNoCookie {
-				http.Redirect(w, r, "/login", http.StatusPermanentRedirect)
+				http.Error(w, "", http.StatusUnauthorized)
 				return
 			}
-			http.Error(w, "Bad request", http.StatusBadRequest)
+			http.Error(w, "", http.StatusUnauthorized)
 			return
 		}
 		sessionToken := cookie.Value
